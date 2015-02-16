@@ -1,0 +1,3 @@
+class glance::params { 
+
+} 
