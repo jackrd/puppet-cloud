@@ -8,6 +8,8 @@
 # Source the setup file to read in the environment variables
 
 source /tmp/env/setuprc.sh
+source /tmp/neutron/env/neutronrc.sh
+source /tmp/nova/env/novarc.sh
 
 # Configuration File
 NEUTRON_CONF=/etc/neutron/neutron.conf
@@ -39,7 +41,7 @@ sed -i "/^admin_password/d" $NEUTRON_CONF
 
 sed -i "/^\[keystone_authtoken\]/a \\
 auth_uri = http:\/\/$MGMT_NETIP_CONTROLLER:5000 \\
-auth_host = controller \\
+auth_host = $AUTH_HOST \\
 admin_tenant_name = service \\
 admin_user = neutron \\
 admin_password = $NEUTRON_PASS \\
@@ -53,8 +55,8 @@ sed -i "/^rabbit_password/d" $NEUTRON_CONF
 sed -i "
 /^\[database\]/a \\
 rpc_backend = neutron.openstack.common.rpc.impl_kombu \\
-rabbit_host = controller \\
-rabbit_password = RABBIT_PASS \\
+rabbit_host = $RABBIT_HOST \\
+rabbit_password = $RABBIT_PASS \\
 " $NEUTRON_CONF
 
 
@@ -68,6 +70,7 @@ sed -i "/^nova_admin_password/d" $NEUTRON_CONF
 sed -i "/^nova_admin_auth_url/d" $NEUTRON_CONF
 
 SERVICE_TENANT_ID=$(keystone tenant-get service | awk '/ id / {print $4}')
+
 sed -i "/^\[DEFAULT\]/a \\
 notify_nova_on_port_status_changes = True \\
 notify_nova_on_port_data_changes = True \\

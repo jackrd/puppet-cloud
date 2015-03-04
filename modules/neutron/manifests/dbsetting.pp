@@ -1,25 +1,17 @@
-class keystone::dbsetting {
+class neutron::dbsetting {
 
-	file { '/tmp/keystone/db.sh':
-		source => 'puppet:///modules/keystone/script/db.sh',
+	if $nodetype == 'cntrnode' {
+	file { '/tmp/neutron/db.sh':
+		source => 'puppet:///modules/neutron/script/db.sh',
 		mode => 777,
-		require => File['/tmp/keystone/'],
+		require => File['/tmp/neutron/'],
 	}
 
-	exec {"exec_db":
-		cwd => '/tmp/keystone/',
-		command => "/tmp/keystone/db.sh ${username} ${passwd} ${db_name} ${db_passwd}",
+	exec {"exec_neutron_db":
+		command => "/tmp/neutron/db.sh ${username} ${passwd} ${neutron_db_name} ${neutron_db_passwd}",
 		path => ["/bin/","/usr/bin/"],
 		refreshonly => true,
-		subscribe => Package["keystone"],
+		subscribe => [ Package["neutron-server"],File["/tmp/neutron/db.sh"]],
 	}
-
-	exec {"exec_dbsync":
-		cwd => '/tmp/keystone/',
-		command => "keystone-manage --nodebug db_sync",
-		path => ["/bin/","/usr/bin/"],
-		refreshonly => true,
-		subscribe => Exec["exec_db"],
 	}
-
 }

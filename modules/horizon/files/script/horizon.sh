@@ -7,12 +7,13 @@
 #####################################################################################
 # Source the setup file to read in the environment variables
 source /tmp/env/setuprc.sh
+source /tmp/horizon/horizonrc.sh
 
 #####################################################################################
 HORIZON_CONF=/etc/openstack-dashboard/local_settings.py
-#APACHE2_CONF=/etc/apache2/apache2.conf
+APACHE2_CONF=/etc/apache2/apache2.conf
 sed -i "/^#/d" $HORIZON_CONF
-#sed -i "/^#/d" $APACHE2_CONF
+sed -i "/^#/d" $APACHE2_CONF
 
 #####################################################################################
 # Modify the value of CACHES['default']['LOCATION'] in
@@ -38,8 +39,8 @@ OPENSTACK_HOST = \"$EXT_IP\" \\
 " $HORIZON_CONF
 
 # Determine the server's fully qualified domain name
-#sed -i "\$a \\
-#ServerName localhost
-#" $APACHE2_CONF
+sed -i "\$a \\
+ServerName localhost
+" $APACHE2_CONF
 
 exit 0

@@ -1,9 +1,21 @@
 class nova::service {
-	service { ["nova-api", "nova-cert", "nova-consoleauth", "nova-scheduler", "nova-conduct", "nova-novncproxy"]:
-		ensure => running,
-		hasstatus => true,
-		hasrestart => true,
-		enable => true,
-		#require => Class["nova::config"],
+
+	if $nodetype == 'cntrnode' {
+
+		service { ["nova-api", "nova-cert", "nova-consoleauth", "nova-scheduler", "nova-conduct", "nova-novncproxy"]:
+			ensure => running,
+			hasstatus => true,
+			hasrestart => true,
+			enable => true,
+		}
+	} elsif $nodetype == 'comptnode'{
+
+		service { ["nova-compute"]:
+			ensure => running,
+			hasstatus => true,
+			hasrestart => true,
+			enable => true,
+		}
+
 	}
 }

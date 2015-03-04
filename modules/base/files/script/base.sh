@@ -4,7 +4,19 @@
 #!/bin/bash
 
 source /tmp/env/setuprc.sh
+node_type=$1
 
+if [ "$node_type" == "comptnode" ]
+then
+
+	ip_address=$MGMT_NETIP_COMPUTE1
+
+elif [ "$node_type" == "cntrnode" ]
+then
+	ip_address=$MGMT_NETIP_CONTROLLER
+else
+	ip_address=$MGMT_NETIP_NETWORK
+fi	
 #####################################################################################
 # Configuration File
 NTP_CONF=/etc/ntp.conf
@@ -24,14 +36,17 @@ fudge 127.127.1.0 stratum 10 \\
 
 #####################################################################################
 # Edit the /etc/mysql/my.cnf 
-sed -i '/^bind-address/s/127.0.0.1/0.0.0.0/g' $MYSQL_CONF
+
+if [ "$node_type" == "comptnode" ]
+then
 	
 # Setup mysql to support utf8 and innodb
-sed -i "/default-storage-engine/d" $MYSQL_CONF
-sed -i "/innodb_file_per_table/d" $MYSQL_CONF
-sed -i "/collation-server = utf8_general_ci/d" $MYSQL_CONF
-sed -i "/init-connect/d" $MYSQL_CONF
-sed -i "/character-set-server/d" $MYSQL_CONF
+sed -i "/^bind-address/d" $MYSQL_CONF
+sed -i "/^default-storage-engine/d" $MYSQL_CONF
+sed -i "/^innodb_file_per_table/d" $MYSQL_CONF
+sed -i "/^collation-server = utf8_general_ci/d" $MYSQL_CONF
+sed -i "/^init-connect/d" $MYSQL_CONF
+sed -i "/^character-set-server/d" $MYSQL_CONF
 
 sed -i "/\[mysqld\]/a \\
 default-storage-engine = innodb \\
@@ -39,58 +54,63 @@ innodb_file_per_table \\
 collation-server = utf8_general_ci \\
 init-connect = 'SET NAMES utf8' \\
 character-set-server = utf8 \\
+bind-address = 0.0.0.0 \\
 " $MYSQL_CONF
-
-##rabbitmqctl change_password guest RABBIT_PASS
+#rabbitmqctl change_password guest RABBIT_PASS
+fi
 
 #####################################################################################
 # Edit the /etc/network/interfaces 
-sed -i "/auto/d" $IFACES_CONF
-sed -i "/iface/d" $IFACES_CONF
-sed -i "/address/d" $IFACES_CONF
-sed -i "/netmask/d" $IFACES_CONF
-sed -i "/gateway/d" $IFACES_CONF
+sed -i "/^#/d" $IFACES_CONF
+sed -i "/^auto/d" $IFACES_CONF
+sed -i "/^iface/d" $IFACES_CONF
+sed -i "/^address/d" $IFACES_CONF
+sed -i "/^netmask/d" $IFACES_CONF
+sed -i "/^gateway/d" $IFACES_CONF
 
 # loopback interface
 sed -i "1 i\auto lo \\
-iface lo inet loopback \
+iface lo inet loopback \\
+
 " $IFACES_CONF
 
 # management interface
 sed -i "1 i\auto $NIC_DEV_NAME_01 \\
 iface $NIC_DEV_NAME_01 inet static \\
-address $MGMT_NETIP_CONTROLLER \\
+address $ip_address \\
 netmask $MGMT_NETMASK \\
-#gateway $MGMT_GATEWAY \
+#gateway $MGMT_GATEWAY \\
+
 " $IFACES_CONF
 
 # external interface
 sed -i "1 i\auto $NIC_DEV_NAME_02 \\
-iface $NIC_DEV_NAME_02 inet dhcp \
+iface $NIC_DEV_NAME_02 inet dhcp \\
+
 " $IFACES_CONF
 
 #####################################################################################
 # Edit the /etc/hosts 
-
-sed -i "/controller/d" $HOSTS_CONF
-sed -i "/network/d" $HOSTS_CONF
-sed -i "/compute1/d" $HOSTS_CONF
+sed -i "/^#/d" $HOSTS_CONF
+sed -i "/cntrnode/d" $HOSTS_CONF
+sed -i "/networknode/d" $HOSTS_CONF
+sed -i "/comptnode/d" $HOSTS_CONF
 sed -i "/block1/d" $HOSTS_CONF
 sed -i "/object1/d" $HOSTS_CONF
 
 # controller 
-sed -i "1 i\$MGMT_NETIP_CONTROLLER      controller"  $HOSTS_CONF
+sed -i "1 i $MGMT_NETIP_CONTROLLER      cntrnode.iec.inventec cntrnode"  $HOSTS_CONF
 
 # network 
-sed -i "1 i\$MGMT_NETIP_NETWORK      network"  $HOSTS_CONF
+sed -i "1 i $MGMT_NETIP_NETWORK      networknode.iec.inventec networknode"  $HOSTS_CONF
 
 # compute1 
-sed -i "1 i\$MGMT_NETIP_COMPUTE1      compute1"  $HOSTS_CONF
+sed -i "1 i $MGMT_NETIP_COMPUTE1      comptnode.iec.inventec comptnode"  $HOSTS_CONF
 
 # block1 
-sed -i "1 i\$MGMT_NETIP_BLOCK1      block1"  $HOSTS_CONF
+#sed -i "1 i $MGMT_NETIP_BLOCK1      block1"  $HOSTS_CONF
 
 # object1 
-sed -i "1 i\$MGMT_NETIP_OBJECT1      object1"  $HOSTS_CONFex
+#sed -i "1 i $MGMT_NETIP_OBJECT1      object1"  $HOSTS_CONFex
 
 exit 0

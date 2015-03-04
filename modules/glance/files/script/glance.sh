@@ -6,6 +6,7 @@
 #####################################################################################
 # Source the setup file to read in the environment variables
 source /tmp/env/setuprc.sh
+source /tmp/glance/env/glancerc.sh
 
 # Configuration File
 GLANCE_API_CONF=/etc/glance/glance-api.conf
@@ -28,7 +29,7 @@ sed -i "/^rabbit_password/d" $GLANCE_API_CONF
 # Configure the Image Service to use the message broker
 sed -i "/^\[DEFAULT\]/a \\
 rpc_backend = rabbit \\
-rabbit_host = controller \\
+rabbit_host = $RABBIT_HOST \\
 rabbit_password = $RABBIT_PASS \\
 " $GLANCE_API_CONF
 
@@ -43,7 +44,7 @@ sed -i "/^flavor/d" $GLANCE_API_CONF $GLANCE_REG_CONF
 
 sed -i "/^\[keystone_authtoken\]/a \\
 auth_uri = http:\/\/$MGMT_NETIP_CONTROLLER:5000 \\
-auth_host = controller \\
+auth_host = $AUTH_HOST \\
 admin_tenant_name = service \\
 admin_user = glance \\
 admin_password = $GLANCE_PASS \\

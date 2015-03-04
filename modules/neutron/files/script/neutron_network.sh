@@ -7,6 +7,7 @@
 # Source the setup file to read in the environment variables
 
 source /tmp/env/setuprc.sh
+source /tmp/neutron/env/neutronrc.sh
 
 # Configuration Files
 SYSCTL_CONF=/etc/sysctl.conf
@@ -46,8 +47,8 @@ sed -i "/^allow_overlapping_ips/d" $NEUTRON_CONF
 sed -i "/^\[DEFAULT\] /a
 auth_strategy = keystone \\
 rpc_backend = neutron.openstack.common.rpc.impl_kombu \\
-rabbit_host = controller \\
-rabbit_password = RABBIT_PASS \\
+rabbit_host = $RABBIT_HOST \\
+rabbit_password = $RABBIT_PASS \\
 core_plugin = ml2 \\
 service_plugins = router \\
 allow_overlapping_ips = True \\
@@ -62,7 +63,7 @@ sed -i "/^admin_password/d" $NEUTRON_CONF
 
 sed -i "/\[keystone_authtoken\]/a \\
 auth_uri = http:\/\/$MGMT_NETIP_CONTROLLER:5000 \\
-auth_host = controller \\
+auth_host = $RABBIT_HOST\\
 admin_tenant_name = service \\
 admin_user = neutron \\
 admin_password = $NEUTRON_METADATA_SECRET \\
@@ -110,7 +111,7 @@ auth_region = regionOne \\
 admin_tenant_name = service \\
 admin_user = neutron \\
 admin_password = $NEUTRON_METADATA_SECRET \\
-nova_metadata_ip = controller \\
+nova_metadata_ip = $MGMT_NETIP_CONTROLLER \\
 metadata_proxy_shared_secret = $NEUTRON_METADATA_SECRET \\
 " $METADATA_AGENT_INI
 

@@ -1,70 +1,30 @@
 #!/bin/bash
 
 #Management network
-export MGMT_NETIP_CONTROLLER=<%= MGMT_NETIP_CONTROLLER %>
-export MGMT_NETIP_NETWORK=<%= MGMT_NETIP_NETWORK %>
-export MGMT_NETIP_COMPUTE1=<%= MGMT_NETIP_COMPUTE1 %>
-export MGMT_NETIP_BLOCK1=<%= MGMT_NETIP_BLOCK1 %>
-export MGMT_NETIP_OBJECT1=<%= MGMT_NETIP_OBJECT1 %>
+export MGMT_NETIP_CONTROLLER=<%= mGMT_NETIP_CONTROLLER %>
+export MGMT_NETIP_NETWORK=<%= mGMT_NETIP_NETWORK %>
+export MGMT_NETIP_COMPUTE1=<%= mGMT_NETIP_COMPUTE1 %>
 
-export MGMT_NETMASK=<%= MGMT_NETMASK %>
-export MGMT_GATEWAY=<%= MGMT_GATEWAY %>
+
+export MGMT_NETMASK=<%= mGMT_NETMASK %>
+export MGMT_GATEWAY=<%= mGMT_GATEWAY %>
 
 #Tunnel network
-export INST_TUNIP_NETWORK=<%= INST_TUNIP_NETWORK %>
-export INST_TUNIP_COMPUTE1=<%= INST_TUNIP_COMPUTE1 %>
+export INST_TUNIP_NETWORK=<%= iNST_TUNIP_NETWORK %>
+export INST_TUNIP_COMPUTE1=<%= iNST_TUNIP_COMPUTE1 %>
 
 #/etc/network/interfaces
-export NIC_DEV_NAME_01=<%= NIC_DEV_NAME_01 %>
-export NIC_DEV_NAME_02=<%= NIC_DEV_NAME_02 %>
-export NIC_DEV_NAME_03=<%= NIC_DEV_NAME_03 %>
-export NIC_DEV_NAME_04=<%= NIC_DEV_NAME_04 %>
+export NIC_DEV_NAME_01=<%= nIC_DEV_NAME_01 %>
+export NIC_DEV_NAME_02=<%= nIC_DEV_NAME_02 %>
+export NIC_DEV_NAME_03=<%= nIC_DEV_NAME_03 %>
+export NIC_DEV_NAME_04=<%= nIC_DEV_NAME_04 %>
 
 #user "admin"
-export ADMIN_PASS=<%= ADMIN_PASS %>
-export ADMIN_EMAIL=<%= ADMIN_EMAIL %>
-export ADMIN_TOKEN=<%= ADMIN_TOKEN %>
+export ADMIN_PASS=<%= aDMIN_PASS %>
+export ADMIN_EMAIL=<%= aDMIN_EMAIL %>
+export ADMIN_TOKEN=<%= aDMIN_TOKEN %>
 
-# Database password for all services
-export MYSQL_ROOT_PASSWD=<%= MYSQL_ROOT_PASSWD %>
-export KEYSTONE_DBPASS=<%= KEYSTONE_DBPASS %>
-export GLANCE_DBPASS=<%= GLANCE_DBPASS %>
-export NOVA_DBPASS=<%= NOVA_DBPASS %>
-export NEUTRON_DBPASS=<%= NEUTRON_DBPASS %>
-export CINDER_DBPASS=<%= CINDER_DBPASS %>
-export CEILOMETER_DBPASS=<%= CEILOMETER_DBPASS %>
+export RABBIT_PASS=<%= rABBIT_PASS %>
+export RABBIT_HOST=<%= rABBIT_HOST %>
 
-# Set up env variables for install
-export OS_USERNAME=<%= OS_USERNAME %>
-export OS_PASSWORD=<%= OS_PASSWORD %>
-export OS_TENANT_NAME=<%= OS_TENANT_NAME %>
-export OS_AUTH_URL=<%= OS_AUTH_URL %>
-
-# Variables for user "glance"
-export GLANCE_PASS=<%= GLANCE_PASS %>
-export GLANCE_EMAIL=<%= GLANCE_EMAIL %>
-
-# Variables for user "nova"
-export NOVA_PASS=<%= NOVA_PASS %>
-export NOVA_EMAIL=<%= NOVA_EMAIL %>
-
-# Variables for user "neutron"
-export NEUTRON_PASS=<%= NEUTRON_PASS %>
-export NEUTRON_EMAIL=<%= NEUTRON_EMAIL %>
-export METADATA_SECRET=<%= METADATA_SECRET %>
-
-# Variables for user "cinder"
-export CINDER_PASS=<%= CINDER_PASS %>
-export CINDER_EMAIL=<%= CINDER_EMAIL %>
-
-# Variables for user "swift"
-export SWIFT_PASS=<%= SWIFT_PASS %>
-export SWIFT_EMAIL=<%= SWIFT_EMAIL %>
-
-# Variables for user "ceilometer"
-export CEILOMETER_PASS=<%= CEILOMETER_PASS %>
-export CEILOMETER_EMAIL=<%= CEILOMETER_EMAIL %>
-
-# Variables for user "trove"
-export TROVE_PASS=<%= TROVE_PASS %>
-export TROVE_EMAIL=<%= TROVE_EMAIL %>
+export AUTH_HOST=<%= aUTH_HOST %>

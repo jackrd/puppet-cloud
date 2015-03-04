@@ -1,6 +1,6 @@
 class test::install {
 
-	package { ["ntp"]:
-		ensure => installed,
-	}
+	#package { ["ntp"]:
+	#	ensure => installed,
+	#}
 }

@@ -6,6 +6,7 @@
 #####################################################################################
 # Source the setup file to read in the environment variables
 source /tmp/env/setuprc.sh
+source /tmp/nova/env/novarc.sh
 
 # Configuration File
 NOVA_CONF=/etc/nova/nova.conf
@@ -25,8 +26,8 @@ sed -i "/^rabbit_password/d" $NOVA_CONF
 
 sed -i "/^\[DEFAULT\]/a \\
 rpc_backend = rabbit \\
-rabbit_host = controller \\
-rabbit_password = RABBIT_PASS \\
+rabbit_host = $RABBIT_HOST \\
+rabbit_password = $RABBIT_PASS \\
 " $NOVA_CONF
 
 # Set the configuration options to the management interface IP address of the controller node
@@ -35,9 +36,9 @@ sed -i "/^vncserver_listen/d" $NOVA_CONF
 sed -i "/^vncserver_proxyclient_address/d" $NOVA_CONF
 
 sed -i "/^\[DEFAULT\]/a \\
-my_ip = controller \\
-vncserver_listen = controller \\
-vncserver_proxyclient_address = controller \\
+my_ip = $MGMT_NETIP_CONTROLLER\\
+vncserver_listen = $MGMT_NETIP_CONTROLLER\\
+vncserver_proxyclient_address = $MGMT_NETIP_CONTROLLER\\
 " $NOVA_CONF
 
 # Configure Compute to use these credentials with the Identity Service running on the controller
@@ -57,7 +58,7 @@ sed -i "/^admin_password/d" $NOVA_CONF
 
 sed -i "/^\[keystone_authtoken\] \\
 auth_uri = http://$MGMT_NETIP_CONTROLLER:5000 \\
-auth_host = controller \\
+auth_host = $MGMT_NETIP_CONTROLLER\\
 auth_port = 35357 \\
 auth_protocol = http \\
 admin_tenant_name = service \\

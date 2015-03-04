@@ -15,4 +15,12 @@ class keystone::config {
 		notify => Class["keystone::service"],
 	}
 
+	
+	#exec { "exec_keystone_createEndpoint":
+	#	command => "keystone endpoint-create --service-id $(keystone service-list | awk '/ identity ${serviceName} --type ${serviceType} --description ${serviceDesc}",
+	#	path => ["/bin/","/usr/bin/"],
+	#	refreshonly => true,
+	#	subscribe => Package["keystone"],
+	#}
+
 }

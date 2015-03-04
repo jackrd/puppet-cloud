@@ -7,7 +7,7 @@ class horizon::config {
 	}
 
 	exec { "exec_horizon":
-		command => "bash -c '/tmp/controller/horizon.sh'",
+		command => "bash -c '/tmp/horizon/horizon.sh'",
 		path => ["/bin/","/usr/bin/"],
 		refreshonly => true,
 		subscribe => File["/tmp/horizon/horizon.sh"],

@@ -1,19 +1,71 @@
 class neutron::config {
 
-	file { '/tmp/cntr/neutron':
-		source => 'puppet://puppet/modules/neutron/script',
-		recurse => true,
+
+if $nodetype == 'cntrnode' {
+
+	file { '/tmp/neutron/neutron_cntlr.sh':
+		source => 'puppet://puppet/modules/neutron/script/neutron_cntlr.sh',
 		mode => 777,
-		require => File['/tmp/cntr/neutron/'],
-		notify => Exec['exec_openstack_06_neutron_cntlr'],
-		#notify => Exec["neutron::config::basic"],
+		require => File['/tmp/neutron/'],
+		notify => Exec['exec_neutron_cntlr'],
 	}
 
-	exec { "exec_openstack_06_neutron_cntlr":
-		command => "bash -c '/tmp/cntr/controller/openstack_06_neutron_cntlr.sh'",
+	exec { "exec_neutron_cntlr":
+		command => "bash -c '/tmp/neutron/neutron_cntlr.sh'",
 		path => ["/bin/","/usr/bin/"],
-		#require => Exec["exec_openstack_03_keystone"],
-		notify => Class["config::service"],
+		refreshonly => true,
+		subscribe => File["/tmp/neutron/neutron_cntlr.sh"],
+		notify => Class["neutron::service"],
 	}	
+
+} elsif $nodetype == 'comptnode' {
+
+	file { '/tmp/neutron/neutron_compt.sh':
+		source => 'puppet://puppet/modules/neutron/script/neutron_compt.sh',
+		mode => 777,
+		require => File['/tmp/neutron/'],
+		notify => Exec['exec_neutron_compt'],
+	}
+
+	exec { "exec_neutron_compt":
+		command => "bash -c '/tmp/neutron/neutron_compt.sh'",
+		path => ["/bin/","/usr/bin/"],
+		refreshonly => true,
+		subscribe => File["/tmp/neutron/neutron_compt.sh"],
+		notify => Class["neutron::service"],
+	}	
+
+
+} elsif $nodetype == 'networknode' {
+
+	file { '/tmp/neutron/neutron_network.sh':
+		source => 'puppet://puppet/modules/neutron/script/neutron_network.sh',
+		mode => 777,
+		require => File['/tmp/neutron/'],
+		notify => Exec['exec_neutron_network'],
+	}
+	exec { "exec_neutron_network":
+		command => "bash -c '/tmp/neutron/neutron_network.sh'",
+		path => ["/bin/","/usr/bin/"],
+		refreshonly => true,
+		subscribe => File["/tmp/neutron/neutron_network.sh"],
+		notify => Class["neutron::service"],
+	}	
+
+	file { '/tmp/neutron/neutron_ovs.sh':
+		source => 'puppet://puppet/modules/neutron/script/neutron_ovs.sh',
+		mode => 777,
+		require => File['/tmp/neutron/'],
+		notify => Exec['exec_neutron_ovs'],
+	}
+
+	exec { "exec_neutron_ovs":
+		command => "bash -c '/tmp/neutron/neutron_ovs.sh'",
+		path => ["/bin/","/usr/bin/"],
+		refreshonly => true,
+		subscribe => [ Package["openvswitch-switch"], File["/tmp/neutron/neutron_ovs.sh"]],
+		notify => Class["neutron::service"],
+	}
+}
 
 }

@@ -7,7 +7,7 @@
 #####################################################################################
 # Source the setup file to read in the environment variables
 source /tmp/env/setuprc.sh
-source /tmp/env/keystonerc.sh
+
 # Configuration File
 KEYSTONE_CONF=/etc/keystone/keystone.conf
 
@@ -15,7 +15,7 @@ KEYSTONE_CONF=/etc/keystone/keystone.conf
 # Specify the location of the database in the configuration file
 sed -i "/^connection/d" $KEYSTONE_CONF
 
-sed -i "/^\[database\]/a connection = mysql:\/\/keystone:$KEYSTONE_DBPASS@$MGMT_IP\/keystone
+sed -i "/^\[database\]/a connection = mysql:\/\/keystone:$KEYSTONE_DBPASS@$MGMT_NETIP_CONTROLLER\/keystone
 " $KEYSTONE_CONF
 
 # Delete the keystone.db

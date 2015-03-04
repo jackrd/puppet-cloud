@@ -1,11 +1,13 @@
 class nova::install {
 	
-	if $::nodetype == 'controller' {
+	if $nodetype == 'cntrnode' {
+
 		package { ["nova-api", "nova-cert", "nova-consoleauth", "nova-scheduler", "nova-conduct", "nova-novncproxy", "python-novaclient"]:
 			ensure => installed,
 		}
-	} else {
-		package { ["nova-compute-kvm", "python-guestfs"]:
+	} elsif $nodetype == 'comptnode'{
+
+		package { ["nova-compute", "python-guestfs"]:
 			ensure => installed,
 		}
 	}

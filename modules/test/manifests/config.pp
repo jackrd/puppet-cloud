@@ -19,8 +19,9 @@ class test::config {
 	
 	exec { "exec_aa":
 		command => "/tmp/test/script/aa.sh",
-		path => ["/bin/"],
+		path => ["/bin/","/usr/bin/"],
 		refreshonly => true,
+		logoutput => on_failure,
 		subscribe => [ File['/tmp/test/script/aa.sh'], File['/tmp/test/env/ww.sh'] ],
 		notify => Service["ntp"],
 	}

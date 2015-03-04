@@ -1,6 +1,19 @@
 class base::install {
-	package { ["ntp", "expect", "mysql-server","python-mysqldb", "rabbitmq-server"]:
+	
+	package { ["ntp", "expect", "python-mysqldb"]:
 		ensure => installed,
+	}
+
+	if $nodetype == 'cntrnode' {
+
+		package { "mysql-server":
+			ensure => installed,
+		}
+
+		package { "rabbitmq-server":
+			ensure => installed,
+		}
+
 	}
 
 }

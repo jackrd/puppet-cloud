@@ -6,20 +6,20 @@ class glance::dbsetting {
 		require => File['/tmp/glance/'],
 	}
 
-	exec {"exec_db":
+	exec {"exec_glance_db":
 		cwd => '/tmp/glance/',
-		command => "/tmp/glance/db.sh ${username} ${passwd} ${db_name} ${db_passwd}",
+		command => "/tmp/glance/db.sh ${username} ${passwd} ${glance_db_name} ${glance_db_passwd}",
 		path => ["/bin/","/usr/bin/"],
 		refreshonly => true,
-		subscribe => Package["glance"],
+		subscribe => [ Package["glance"],File["/tmp/glance/db.sh"] ],
 	}
 
-	exec {"exec_dbsync":
+	exec {"exec_glance_dbsync":
 		cwd => '/tmp/glance/',
 		command => "glance-manage --nodebug db_sync",
 		path => ["/bin/","/usr/bin/"],
 		refreshonly => true,
-		subscribe => Exec["exec_db"],
+		subscribe => Exec["exec_glance_db"],
 	}
 
 }

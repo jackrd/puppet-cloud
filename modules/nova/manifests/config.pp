@@ -1,6 +1,6 @@
 class nova::config {
 
-	if $::nodetype == 'controller' {
+	if $::nodetype == 'cntrnode' {
 		file { '/tmp/nova/nova_cntlr.sh':
 			source => 'puppet://puppet/modules/nova/script/nova_cntlr.sh',
 			mode => 777,

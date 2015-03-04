@@ -7,7 +7,7 @@
 # Source the setup file to read in the environment variables
 
 source /tmp/env/setuprc.sh
-
+source /tmp/neutron/env/neutronrc.sh
 
 # Configuration File
 SYSCTL_CONF=/etc/sysctl.conf
@@ -19,11 +19,12 @@ NOVA_CONF=/etc/nova/nova.conf
 # Configure compute node
 # Prerequisites
 # Edit /etc/sysctl.conf
-sed -i "
-/^#net.ipv4.conf.all.rp_filter=.*$/s/^.*$/net.ipv4.conf.all.rp_filter=0 \\
-/^#net.ipv4.conf.default.rp_filter=.*$/s/^.*$/net.ipv4.conf.default.rp_filter=0 \\
-" $SYSCTL_CONF
+sed -i "/^#/d" $SYSCTL_CONF
+sed -i "/^net.ipv4.conf.all.rp_filter/d" $SYSCTL_CONF
+sed -i "/^net.ipv4.conf.default.rp_filter/d" $SYSCTL_CONF
 
+sed -i "1 i net.ipv4.conf.all.rp_filter=0" $SYSCTL_CONF
+sed -i "1 i net.ipv4.conf.default.rp_filter=0" $SYSCTL_CONF
 # Implement the changes
 sysctl -p
 
@@ -32,7 +33,7 @@ sysctl -p
 # The Networking common component configuration includes
 # the authentication mechanism, message broker, and plug-in
 # Configure Networking to use the Identity service for authentication
-
+sed -i "/^#/d" $NEUTRON_CONF
 sed -i "/^auth_strategy/d" $NEUTRON_CONF
 
 sed -i  "/^\[DEFAULT\]/a \\
@@ -80,6 +81,8 @@ allow_overlapping_ips = True \\
 # To configure the Modular Layer 2 (ML2) plug-in
 # The ML2 plug-in uses the Open vSwitch (OVS) mechanism (agent)
 # to build virtual networking framework for instances
+
+sed -i "/^#/d" $ML2_CONF
 sed -i "/^type_drivers/d" $ML2_CONF
 sed -i "/^tenant_network_types/d" $ML2_CONF
 sed -i "/^mechanism_drivers/d" $ML2_CONF
@@ -121,7 +124,7 @@ firewall_driver = neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewal
 #  Add the integration bridge
 #ovs-vsctl add-br br-int
 
-
+sed -i "/^#/d" $NOVA_CONF
 sed -i "/^network_api_class/d" $NOVA_CONF
 sed -i "/^neutron_url/d" $NOVA_CONF
 sed -i "/^neutron_auth_strategy/d" $NOVA_CONF
