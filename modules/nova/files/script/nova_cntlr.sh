@@ -51,6 +51,7 @@ sed -i "/^\[DEFAULT\]/a \\
 auth_strategy = keystone
 " $NOVA_CONF
 
+sed -i "/^\[keystone_authtoken\]/d" $NOVA_CONF
 sed -i "/^auth_uri/d" $NOVA_CONF
 sed -i "/^auth_host/d" $NOVA_CONF
 sed -i "/^auth_port/d" $NOVA_CONF
@@ -59,7 +60,9 @@ sed -i "/^admin_tenant_name/d" $NOVA_CONF
 sed -i "/^admin_user/d" $NOVA_CONF
 sed -i "/^admin_password/d" $NOVA_CONF
 
-sed -i "/^\[keystone_authtoken\] \\
+sed -i "1 i  \[keystone_authtoken\]" $NOVA_CONF
+
+sed -i "/^\[keystone_authtoken\]/a \\
 auth_uri = http://$MGMT_NETIP_CONTROLLER:5000 \\
 auth_host = $MGMT_NETIP_CONTROLLER\\
 auth_port = 35357 \\

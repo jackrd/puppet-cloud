@@ -7,7 +7,7 @@ class nova::config {
 			require => File['/tmp/nova/'],
 		}
 
-		exec { "exec_openstack_05_nova_cntlr":
+		exec { "exec_nova_cntlr":
 			command => "bash -c '/tmp/nova/nova_cntlr.sh'",
 			path => ["/bin/","/usr/bin/"],
 			refreshonly => true,

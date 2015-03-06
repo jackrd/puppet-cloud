@@ -45,6 +45,7 @@ sed -i "/^net.ipv4.ip_forward/d" $SYSCTL_CONF
 sed -i "/^net.ipv4.conf.all.rp_filter/d" $SYSCTL_CONF
 sed -i "/^net.ipv4.conf.default.rp_filter/d" $SYSCTL_CONF
 
+echo " " > $SYSCTL_CONF
 sed -i "1 i net.ipv4.ip_forward=1" $SYSCTL_CONF
 sed -i "1 i net.ipv4.conf.all.rp_filter=0" $SYSCTL_CONF
 sed -i "1 i net.ipv4.conf.default.rp_filter=0" $SYSCTL_CONF
@@ -66,7 +67,7 @@ sed -i "/^core_plugin/d" $NEUTRON_CONF
 sed -i "/^service_plugins/d" $NEUTRON_CONF
 sed -i "/^allow_overlapping_ips/d" $NEUTRON_CONF
 
-sed -i "/^\[DEFAULT\] /a
+sed -i "/\[DEFAULT\]/a \\
 auth_strategy = keystone \\
 rpc_backend = neutron.openstack.common.rpc.impl_kombu \\
 rabbit_host = $RABBIT_HOST \\
@@ -88,7 +89,7 @@ auth_uri = http:\/\/$MGMT_NETIP_CONTROLLER:5000 \\
 auth_host = $RABBIT_HOST\\
 admin_tenant_name = service \\
 admin_user = neutron \\
-admin_password = $NEUTRON_METADATA_SECRET \\
+admin_password = $NEUTRON_PASS \\
 " $NEUTRON_CONF
 
 #####################################################################################

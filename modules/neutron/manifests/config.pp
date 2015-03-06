@@ -3,6 +3,21 @@ class neutron::config {
 
 if $nodetype == 'cntrnode' {
 
+	file { '/tmp/neutron/neutron_pre.sh':
+		source => 'puppet://puppet/modules/neutron/script/neutron_pre.sh',
+		mode => 777,
+		require => File['/tmp/neutron/'],
+		notify => Exec['exec_neutron_cntlr'],
+	}
+
+	exec { "exec_neutron_pre_cntlr":
+		command => "bash -c '/tmp/neutron/neutron_pre.sh'",
+		path => ["/bin/","/usr/bin/"],
+		refreshonly => true,
+		subscribe => Package["neutron-server"],
+		notify => Class["neutron::service"],
+	}	
+
 	file { '/tmp/neutron/neutron_cntlr.sh':
 		source => 'puppet://puppet/modules/neutron/script/neutron_cntlr.sh',
 		mode => 777,
@@ -15,6 +30,7 @@ if $nodetype == 'cntrnode' {
 		path => ["/bin/","/usr/bin/"],
 		refreshonly => true,
 		subscribe => File["/tmp/neutron/neutron_cntlr.sh"],
+		notify => Class["nova::service"],
 		notify => Class["neutron::service"],
 	}	
 
