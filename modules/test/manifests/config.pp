@@ -23,7 +23,7 @@ class test::config {
 		refreshonly => true,
 		logoutput => on_failure,
 		subscribe => [ File['/tmp/test/script/aa.sh'], File['/tmp/test/env/ww.sh'] ],
-		notify => Service["ntp"],
+		#notify => Service["ntp"],
 	}
 	
 

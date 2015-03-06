@@ -15,16 +15,31 @@ NEUTRON_CONF=/etc/neutron/neutron.conf
 ML2_CONF=/etc/neutron/plugins/ml2/ml2_conf.ini
 NOVA_CONF=/etc/nova/nova.conf
 
+
+sed -i '/^#/d' $SYSCTL_CONF
+sed -i '/^\s*$/d' $SYSCTL_CONF
+
+sed -i '/^#/d' $NEUTRON_CONF
+sed -i '/^\s*$/d' $NEUTRON_CONF
+
+sed -i '/^#/d' $ML2_CONF
+sed -i '/^\s*$/d' $ML2_CONF
+
+sed -i '/^#/d' $NOVA_CONF
+sed -i '/^\s*$/d' $NOVA_CONF
+
+
 #####################################################################################
 # Configure compute node
 # Prerequisites
 # Edit /etc/sysctl.conf
-sed -i "/^#/d" $SYSCTL_CONF
+
 sed -i "/^net.ipv4.conf.all.rp_filter/d" $SYSCTL_CONF
 sed -i "/^net.ipv4.conf.default.rp_filter/d" $SYSCTL_CONF
 
 sed -i "1 i net.ipv4.conf.all.rp_filter=0" $SYSCTL_CONF
 sed -i "1 i net.ipv4.conf.default.rp_filter=0" $SYSCTL_CONF
+
 # Implement the changes
 sysctl -p
 
@@ -33,7 +48,7 @@ sysctl -p
 # The Networking common component configuration includes
 # the authentication mechanism, message broker, and plug-in
 # Configure Networking to use the Identity service for authentication
-sed -i "/^#/d" $NEUTRON_CONF
+
 sed -i "/^auth_strategy/d" $NEUTRON_CONF
 
 sed -i  "/^\[DEFAULT\]/a \\

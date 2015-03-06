@@ -1,6 +1,6 @@
 class nova::config {
 
-	if $::nodetype == 'cntrnode' {
+	if $nodetype == 'cntrnode' {
 		file { '/tmp/nova/nova_cntlr.sh':
 			source => 'puppet://puppet/modules/nova/script/nova_cntlr.sh',
 			mode => 777,
@@ -14,7 +14,8 @@ class nova::config {
 			subscribe => File["/tmp/nova/nova_cntlr.sh"],
 			notify => Class["nova::service"],
 		}	
-	} else {
+	} elsif $nodetype == 'comptnode' { 
+
 		file { '/tmp/nova/nova_compt.sh':
 			source => 'puppet://puppet/modules/nova/script/nova_compt.sh',
 			mode => 777,

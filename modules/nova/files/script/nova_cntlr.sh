@@ -11,6 +11,9 @@ source /tmp/nova/env/novarc.sh
 # Configuration File
 NOVA_CONF=/etc/nova/nova.conf
 
+sed -i '/^#/d' $NOVA_CONF
+sed -i '/^\s*$/d' $NOVA_CONF
+
 #####################################################################################
 # Specify the location of the database in the configuration file
 sed -i "/^connection/d" $NOVA_CONF

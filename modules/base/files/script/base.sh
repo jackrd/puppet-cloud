@@ -8,9 +8,7 @@ node_type=$1
 
 if [ "$node_type" == "comptnode" ]
 then
-
 	ip_address=$MGMT_NETIP_COMPUTE1
-
 elif [ "$node_type" == "cntrnode" ]
 then
 	ip_address=$MGMT_NETIP_CONTROLLER
@@ -19,10 +17,23 @@ else
 fi	
 #####################################################################################
 # Configuration File
+
 NTP_CONF=/etc/ntp.conf
 MYSQL_CONF=/etc/mysql/my.cnf
 IFACES_CONF=/etc/network/interfaces
 HOSTS_CONF=/etc/hosts
+
+sed -i "/^#/d" $NTP_CONF
+sed -i "/^#/d" $MYSQL_CONF
+sed -i "/^#/d" $IFACES_CONF
+sed -i "/^#/d" $HOSTS_CONF
+
+
+sed -i '/^\s*$/d' $NTP_CONF
+sed -i '/^\s*$/d' $MYSQL_CONF
+#sed -i '/^\s*$/d' $IFACES_CONF
+sed -i '/^\s*$/d' $HOSTS_CONF
+
 
 #####################################################################################
 # Edit the/etc/ntp.conf

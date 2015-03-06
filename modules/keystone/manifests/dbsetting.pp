@@ -6,7 +6,7 @@ class keystone::dbsetting {
 		require => File['/tmp/keystone/'],
 	}
 
-	exec {"exec_db_keystone":
+	exec {"exec_keystone_db":
 		cwd => '/tmp/keystone/',
 		command => "/tmp/keystone/db.sh ${username} ${passwd} ${keystone_db_name} ${keystone_db_passwd}",
 		path => ["/bin/","/usr/bin/"],
@@ -14,12 +14,12 @@ class keystone::dbsetting {
 		subscribe => [ Package["keystone"],File["/tmp/keystone/db.sh"] ],
 	}
 
-	exec {"exec_dbsync_keystone":
+	exec {"exec_keystone_dbsync":
 		cwd => '/tmp/keystone/',
 		command => "keystone-manage --nodebug db_sync",
 		path => ["/bin/","/usr/bin/"],
 		refreshonly => true,
-		subscribe => Exec["exec_db_keystone"],
+		subscribe => Exec["exec_keystone_db"],
 	}
 
 }

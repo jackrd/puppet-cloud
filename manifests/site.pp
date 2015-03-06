@@ -29,6 +29,7 @@ node 'cntrnode.iec.inventec' {
 	$nIC_DEV_NAME_04 = 'em4'
 
 	$nodetype = 'cntrnode'
+
 	$rABBIT_HOST = 'cntrnode'
 	$rABBIT_PASS = 'RABBIT_PASS'
 
@@ -38,16 +39,10 @@ node 'cntrnode.iec.inventec' {
 	
 	$aUTH_HOST = 'cntrnode'
 
+	$db_passwd = '111111'
+
 	include base
 	
-	$username = 'root'
-	$passwd = '111111'
-
-	$db_name = 'keystone'
-	$db_passwd = '222222'
-	
-	#include test
-
 	$tenantName = 'admin'
 	$tenantDesc = 'tenant Desc'
 	$userName = 'admin'
@@ -58,33 +53,46 @@ node 'cntrnode.iec.inventec' {
 	$serviceType = 'identity'
 	$serviceDesc = 'service Desc'
 	
+	$kEYSTONE_DBPASS = '111111'
+	$kEYSTONE_PASS = '111111'
 	$keystone_db_name = 'keystone'
-	$keystone_db_passwd = '222222'
-	$kEYSTONE_DBPASS = 'KEYSTONE_DBPASS'
+	$keystone_db_passwd = '111111'
 
 	include keystone
 
-	$gLANCE_DBPASS = 'GLANCE_DBPASS'
-	$gLANCE_PASS = 'GLANCE_PASS'
+	$gLANCE_DBPASS = '222222'
+	$gLANCE_PASS = '111111'
 		
 	$glance_db_name = 'glance'
 	$glance_db_passwd = '222222'
 
 	include glance
 
-
-	$nOVA_DBPASS = 'NOVA_DBPASS'
-	$nOVA_PASS = 'NOVA_PASS'
+	$nOVA_DBPASS = '222222'
+	$nOVA_PASS = '111111'
 	$nOVA_EMAIL = 'NOVA_EMAIL'
+	
+	$nova_db_name = 'nova'
+	$nova_db_passwd = '222222'
 
 	include nova
+
+	$nEUTRON_ADMIN_PASSWORD = '111111'
 	$nEUTRON_DBPASS = 'NEUTRON_DBPASS'
-	$nEUTRON_PASS = 'NEUTRON_PASS'
+	$nEUTRON_PASS = '111111'
 	$nEUTRON_EMAIL = 'NEUTRON_EMAIL'
+		
+	$neutron_db_name = 'neutron'
+	$neutron_db_passwd = 'NEUTRON_DBPASS'
+
 	$mETADATA_SECRET = 'METADA_SECRET'
+	$iNTERFACE_NAME = 'em3'
+
 	include neutron
+
 	include horizon
 
+	#include test
 
 }
 
@@ -125,11 +133,14 @@ node 'networknode.iec.inventec' {
 	$aUTH_HOST = 'cntrnode'
 
 	include base
+
+	$nEUTRON_ADMIN_PASSWORD = '111111'
 	$nEUTRON_DBPASS = 'NEUTRON_DBPASS'
 	$nEUTRON_PASS = 'NEUTRON_PASS'
 	$nEUTRON_EMAIL = 'NEUTRON_EMAIL'
 	$mETADATA_SECRET = 'METADA_SECRET'
 	$iNTERFACE_NAME = 'em3'
+
 	include neutron
 
 
@@ -175,13 +186,16 @@ node 'comptnode.iec.inventec' {
 	$nOVA_DBPASS = 'NOVA_DBPASS'
 	$nOVA_PASS = 'NOVA_PASS'
 	$nOVA_EMAIL = 'NOVA_EMAIL'
+
 	include nova
 
+	$nEUTRON_ADMIN_PASSWORD = '111111'
 	$nEUTRON_DBPASS = 'NEUTRON_DBPASS'
 	$nEUTRON_PASS = 'NEUTRON_PASS'
 	$nEUTRON_EMAIL = 'NEUTRON_EMAIL'
 	$mETADATA_SECRET = 'METADA_SECRET'
 	$iNTERFACE_NAME = 'em3'
+
 	include neutron
 	
 

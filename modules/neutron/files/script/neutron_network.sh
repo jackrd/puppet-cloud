@@ -10,6 +10,7 @@ source /tmp/env/setuprc.sh
 source /tmp/neutron/env/neutronrc.sh
 
 # Configuration Files
+
 SYSCTL_CONF=/etc/sysctl.conf
 NEUTRON_CONF=/etc/neutron/neutron.conf
 L3_AGENT_INI=/etc/neutron/l3_agent.ini
@@ -17,15 +18,36 @@ DHCP_AGENT_INI=/etc/neutron/dhcp_agent.ini
 METADATA_AGENT_INI=/etc/neutron/metadata_agent.ini
 ML2_CONF=/etc/neutron/plugins/ml2/ml2_conf.ini
 
+sed -i '/^#/d' $SYSCTL_CONF
+sed -i '/^\s*$/d' $SYSCTL_CONF
+
+sed -i '/^#/d' $NEUTRON_CONF
+sed -i '/^\s*$/d' $NEUTRON_CONF
+
+sed -i '/^#/d' $L3_AGENT_INI
+sed -i '/^\s*$/d' $L3_AGENT_INI
+
+sed -i '/^#/d' $DHCP_AGENT_INI
+sed -i '/^\s*$/d' $DHCP_AGENT_INI
+
+sed -i '/^#/d' $METADATA_AGENT_INI
+sed -i '/^\s*$/d' $METADATA_AGENT_INI
+
+sed -i '/^#/d' $ML2_CONF
+sed -i '/^\s*$/d' $ML2_CONF
+
 #####################################################################################
 # Configure network node
 # Prerequisites
 # Edit /etc/sysctl.conf
-sed -i "
-/^#net.ipv4.ip_forward=.*$/s/^.*$/net.ipv4.ip_forward=1/g
-/^#net.ipv4.conf.all.rp_filter=.*$/s/^.*$/net.ipv4.conf.all.rp_filter=0/g
-/^#net.ipv4.conf.default.rp_filter=.*$/s/^.*$/net.ipv4.conf.default.rp_filter=0/g
-" $SYSCTL_CONF
+
+sed -i "/^net.ipv4.ip_forward/d" $SYSCTL_CONF
+sed -i "/^net.ipv4.conf.all.rp_filter/d" $SYSCTL_CONF
+sed -i "/^net.ipv4.conf.default.rp_filter/d" $SYSCTL_CONF
+
+sed -i "1 i net.ipv4.ip_forward=1" $SYSCTL_CONF
+sed -i "1 i net.ipv4.conf.all.rp_filter=0" $SYSCTL_CONF
+sed -i "1 i net.ipv4.conf.default.rp_filter=0" $SYSCTL_CONF
 
 # Implement the changes
 sysctl -p
@@ -71,6 +93,7 @@ admin_password = $NEUTRON_METADATA_SECRET \\
 
 #####################################################################################
 # To configure the Layer-3 (L3) agent
+
 sed -i "/^interface_driver/d" $L3_AGENT_INI
 sed -i "/^use_namespaces/d" $L3_AGENT_INI
 
@@ -81,11 +104,11 @@ use_namespaces = True \\
 
 #####################################################################################
 # To configure the DHCP agent
+
 sed -i "/^interface_driver/d" $DHCP_AGENT_INI
 sed -i "/^dhcp_driver/d" $DHCP_AGENT_INI
 sed -i "/^use_namespaces/d" $DHCP_AGENT_INI
 
-# The DHCP agent provides DHCP services for instance virtual networks
 sed -i "/\[DEFAULT\]/a \\
 interface_driver = neutron.agent.linux.interface.OVSInterfaceDriver \\
 dhcp_driver = neutron.agent.linux.dhcp.Dnsmasq \\
@@ -97,6 +120,7 @@ use_namespaces = True \\
 # The metadata agent provides configuration information such as
 # credentials for remote access to instances
 # 1. Edit the /etc/neutron/metadata_agent.ini file
+
 sed -i "/^auth_url/d" $METADATA_AGENT_INI
 sed -i "/^auth_region/d" $METADATA_AGENT_INI
 sed -i "/^admin_tenant_name/d" $METADATA_AGENT_INI
@@ -141,7 +165,6 @@ sed -i "/^\[ml2_type_gre\]/a \\
 tunnel_id_ranges = 1:1000 \\
 " $ML2_CONF
 
-
 sed -i "/^\[ovs\]/a \\
 local_ip = $INST_TUNIP_NETWORK \\
 tunnel_type = gre \\
@@ -152,22 +175,5 @@ sed -i "/^\[securitygroup\]/a \\
 firewall_driver = neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver \\
 enable_security_group = True \\
 " $ML2_CONF
-
-#####################################################################################
-# To configure the Open vSwitch (OVS) service
-# The OVS service provides the underlying virtual networking framework for instances.
-# The integration bridge br-int handles internal instance network traffic within OVS.
-# The external bridge br-ex handles external instance network traffic within OVS.
-# 1. Restart the OVS service
-#service openvswitch-switch restart
-
-# 2. Add the integration bridge
-#ovs-vsctl add-br br-int
-
-# 3. Add the external bridge
-#ovs-vsctl add-br br-ex
-
-# 4. Add a port to the external bridge that connects to the physical external network interface
-#ovs-vsctl add-port br-ex $NIC_DEV_NAME_03
 
 exit 0

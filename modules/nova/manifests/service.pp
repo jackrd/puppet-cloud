@@ -2,7 +2,7 @@ class nova::service {
 
 	if $nodetype == 'cntrnode' {
 
-		service { ["nova-api", "nova-cert", "nova-consoleauth", "nova-scheduler", "nova-conduct", "nova-novncproxy"]:
+		service { ["nova-api", "nova-cert", "nova-consoleauth", "nova-scheduler", "nova-conductor", "nova-novncproxy"]:
 			ensure => running,
 			hasstatus => true,
 			hasrestart => true,

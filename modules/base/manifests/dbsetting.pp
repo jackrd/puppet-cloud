@@ -7,7 +7,7 @@ if $nodetype == 'cntrnode' {
 		require => File['/tmp/base/'],
 	}
 
-	exec {"exec_dbsync":
+	exec {"exec_init_db":
 		cwd => '/tmp/base/',
 		command => "mysql_install_db",
 		path => ["/bin/","/usr/bin/"],
@@ -15,13 +15,13 @@ if $nodetype == 'cntrnode' {
 		subscribe => Package["mysql-server"],
 
 	}
-
+	
 	exec {"exec_db":
 		cwd => '/tmp/base/',
 		command => "/tmp/base/db.sh ${db_passwd}",
 		path => ["/bin/","/usr/bin/"],
 		refreshonly => true,
-		subscribe => [ Exec["exec_dbsync"], File["/tmp/base/db.sh"] ],
+		subscribe => [ Exec["exec_init_db"], File["/tmp/base/db.sh"] ],
 	}
 
 }

@@ -12,6 +12,9 @@ source /tmp/glance/env/glancerc.sh
 GLANCE_API_CONF=/etc/glance/glance-api.conf
 GLANCE_REG_CONF=/etc/glance/glance-registry.conf
 
+sed -i "/^#/d" $GLANCE_API_CONF $GLANCE_REG_CONF
+sed -i '/^\s*$/d' $GLANCE_API_CONF $GLANCE_REG_CONF
+
 #####################################################################################
 # Specify the location of the database in the configuration file
 
