@@ -11,7 +11,7 @@ class nova::config {
 			command => "bash -c '/tmp/nova/nova_cntlr.sh'",
 			path => ["/bin/","/usr/bin/"],
 			refreshonly => true,
-			subscribe => File["/tmp/nova/nova_cntlr.sh"],
+			subscribe => [ File["/tmp/nova/nova_cntlr.sh"],File["/tmp/nova/env/novarc.sh"]],
 			notify => Class["nova::service"],
 		}	
 	} elsif $nodetype == 'comptnode' { 
@@ -26,7 +26,7 @@ class nova::config {
 			command => "bash -c '/tmp/nova/nova_compt.sh'",
 			path => ["/bin/","/usr/bin/"],
 			refreshonly => true,
-			subscribe => File["/tmp/nova/nova_compt.sh"],
+			subscribe => [ File["/tmp/nova/nova_compt.sh"],File["/tmp/nova/env/novarc.sh"]],
 			notify => Class["nova::service"],
 		}	
 	}

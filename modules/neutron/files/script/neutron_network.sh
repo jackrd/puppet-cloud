@@ -74,7 +74,7 @@ rabbit_host = $RABBIT_HOST \\
 rabbit_password = $RABBIT_PASS \\
 core_plugin = ml2 \\
 service_plugins = router \\
-allow_overlapping_ips = True \\
+allow_overlapping_ips = True 
 " $NEUTRON_CONF
 
 sed -i "/^auth_uri/d" $NEUTRON_CONF
@@ -89,7 +89,7 @@ auth_uri = http:\/\/$MGMT_NETIP_CONTROLLER:5000 \\
 auth_host = $RABBIT_HOST\\
 admin_tenant_name = service \\
 admin_user = neutron \\
-admin_password = $NEUTRON_PASS \\
+admin_password = $NEUTRON_PASS 
 " $NEUTRON_CONF
 
 #####################################################################################
@@ -100,7 +100,7 @@ sed -i "/^use_namespaces/d" $L3_AGENT_INI
 
 sed -i "/\[DEFAULT\]/a \\
 interface_driver = neutron.agent.linux.interface.OVSInterfaceDriver \\
-use_namespaces = True \\
+use_namespaces = True 
 " $L3_AGENT_INI
 
 #####################################################################################
@@ -113,7 +113,7 @@ sed -i "/^use_namespaces/d" $DHCP_AGENT_INI
 sed -i "/\[DEFAULT\]/a \\
 interface_driver = neutron.agent.linux.interface.OVSInterfaceDriver \\
 dhcp_driver = neutron.agent.linux.dhcp.Dnsmasq \\
-use_namespaces = True \\
+use_namespaces = True 
 " $DHCP_AGENT_INI
 
 #####################################################################################
@@ -137,7 +137,7 @@ admin_tenant_name = service \\
 admin_user = neutron \\
 admin_password = $NEUTRON_METADATA_SECRET \\
 nova_metadata_ip = $MGMT_NETIP_CONTROLLER \\
-metadata_proxy_shared_secret = $NEUTRON_METADATA_SECRET \\
+metadata_proxy_shared_secret = $NEUTRON_METADATA_SECRET 
 " $METADATA_AGENT_INI
 
 #####################################################################################
@@ -159,22 +159,22 @@ sed -i "/^enable_security_group/d" $ML2_CONF
 sed -i "/^\[ml2\]/a \\
 type_drivers = gre \\
 tenant_network_types = gre \\
-mechanism_drivers = openvswitch \\
+mechanism_drivers = openvswitch 
 " $ML2_CONF
 
 sed -i "/^\[ml2_type_gre\]/a \\
-tunnel_id_ranges = 1:1000 \\
+tunnel_id_ranges = 1:1000 
 " $ML2_CONF
 
 sed -i "/^\[ovs\]/a \\
 local_ip = $INST_TUNIP_NETWORK \\
 tunnel_type = gre \\
-enable_tunneling = True \\
+enable_tunneling = True 
 " $ML2_CONF
 
 sed -i "/^\[securitygroup\]/a \\
 firewall_driver = neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver \\
-enable_security_group = True \\
+enable_security_group = True 
 " $ML2_CONF
 
 exit 0

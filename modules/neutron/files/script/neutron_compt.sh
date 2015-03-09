@@ -66,7 +66,7 @@ auth_uri = http:\/\/$MGMT_NETIP_CONTROLLER:5000
 auth_host = controller \\
 admin_tenant_name = service \\
 admin_user = neutron \\
-admin_password = $NEUTRON_ADMIN_PASSWORD \\
+admin_password = $NEUTRON_ADMIN_PASSWORD 
 " $NEUTRON_CONF
 
 
@@ -78,7 +78,7 @@ sed -i "/^rabbit_password/d" $NEUTRON_CONF
 sed -i "/^\[DEFAULT\]/a \\
 rpc_backend = neutron.openstack.common.rpc.impl_kombu \\
 rabbit_host = controller \\
-rabbit_password = RABBIT_PASS \\
+rabbit_password = RABBIT_PASS 
 " $NEUTRON_CONF
 
 # Configure Networking to use the Modular Layer 2 (ML2) plug-in and associated services
@@ -89,7 +89,7 @@ sed -i "/^allow_overlapping_ips/d" $NEUTRON_CONF
 sed -i "/^\[DEFAULT\]/a \\
 core_plugin = ml2 \\
 service_plugins = router \\
-allow_overlapping_ips = True \\
+allow_overlapping_ips = True 
 " $NEUTRON_CONF
 
 #####################################################################################
@@ -109,7 +109,7 @@ type_drivers = gre \\
 tenant_network_types = gre \\
 mechanism_drivers = openvswitch \\
 tunnel_id_ranges = 1:1000 \\
-enable_security_group = True \\
+enable_security_group = True 
 " $ML2_CONF
 
 sed -i "/^local_ip/d" $ML2_CONF
@@ -161,7 +161,7 @@ neutron_admin_password = $NEUTRON_ADMIN_PASSWORD \\
 neutron_admin_auth_url = http://$MGMT_NETIP_CONTROLLER:35357/v2.0 \\
 linuxnet_interface_driver = nova.network.linux_net.LinuxOVSInterfaceDriver \\
 firewall_driver = nova.virt.firewall.NoopFirewallDriver \\
-security_group_api = neutron \\
+security_group_api = neutron 
 " $NOVA_CONF
 
 exit 0

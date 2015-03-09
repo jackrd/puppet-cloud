@@ -17,6 +17,9 @@ sed -i '/^\s*$/d' $NOVA_CONF
 #####################################################################################
 # Specify the location of the database in the configuration file
 sed -i "/^connection/d" $NOVA_CONF
+sed -i "/^\[database\]/d" $NOVA_CONF
+
+sed -i "1 i \[database\]" $NOVA_CONF
 
 sed -i "/^\[database\]/a \\
 connection = mysql:\/\/nova:$NOVA_DBPASS@$MGMT_NETIP_CONTROLLER/nova
@@ -26,29 +29,19 @@ connection = mysql:\/\/nova:$NOVA_DBPASS@$MGMT_NETIP_CONTROLLER/nova
 sed -i "/^rpc_backend/d" $NOVA_CONF
 sed -i "/^rabbit_host/d" $NOVA_CONF
 sed -i "/^rabbit_password/d" $NOVA_CONF
+sed -i "/^my_ip/d" $NOVA_CONF
+sed -i "/^vncserver_listen/d" $NOVA_CONF
+sed -i "/^vncserver_proxyclient_address/d" $NOVA_CONF
+sed -i "/^auth_strategy/d" $NOVA_CONF
 
 sed -i "/^\[DEFAULT\]/a \\
 rpc_backend = rabbit \\
 rabbit_host = $RABBIT_HOST \\
 rabbit_password = $RABBIT_PASS \\
-" $NOVA_CONF
-
-# Set the configuration options to the management interface IP address of the controller node
-sed -i "/^my_ip/d" $NOVA_CONF
-sed -i "/^vncserver_listen/d" $NOVA_CONF
-sed -i "/^vncserver_proxyclient_address/d" $NOVA_CONF
-
-sed -i "/^\[DEFAULT\]/a \\
 my_ip = $MGMT_NETIP_CONTROLLER\\
 vncserver_listen = $MGMT_NETIP_CONTROLLER\\
 vncserver_proxyclient_address = $MGMT_NETIP_CONTROLLER\\
-" $NOVA_CONF
-
-# Configure Compute to use these credentials with the Identity Service running on the controller
-sed -i "/^auth_strategy/d" $NOVA_CONF
-
-sed -i "/^\[DEFAULT\]/a \\
-auth_strategy = keystone
+auth_strategy = keystone 
 " $NOVA_CONF
 
 sed -i "/^\[keystone_authtoken\]/d" $NOVA_CONF

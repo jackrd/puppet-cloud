@@ -7,7 +7,7 @@ if $nodetype == 'cntrnode' {
 		source => 'puppet://puppet/modules/neutron/script/neutron_pre.sh',
 		mode => 777,
 		require => File['/tmp/neutron/'],
-		notify => Exec['exec_neutron_cntlr'],
+		notify => Exec['exec_neutron_pre_cntlr'],
 	}
 
 	exec { "exec_neutron_pre_cntlr":
@@ -29,9 +29,9 @@ if $nodetype == 'cntrnode' {
 		command => "bash -c '/tmp/neutron/neutron_cntlr.sh'",
 		path => ["/bin/","/usr/bin/"],
 		refreshonly => true,
-		subscribe => File["/tmp/neutron/neutron_cntlr.sh"],
-		notify => Class["nova::service"],
-		notify => Class["neutron::service"],
+		subscribe => [File["/tmp/neutron/neutron_cntlr.sh"],File["/tmp/neutron/env/neutronrc.sh"]],
+		require => [ Class["nova::install"], Class["neutron::install"] ],
+		notify => [ Class["nova::service"],Class["neutron::service"]],
 	}	
 
 } elsif $nodetype == 'comptnode' {
@@ -47,7 +47,7 @@ if $nodetype == 'cntrnode' {
 		command => "bash -c '/tmp/neutron/neutron_compt.sh'",
 		path => ["/bin/","/usr/bin/"],
 		refreshonly => true,
-		subscribe => File["/tmp/neutron/neutron_compt.sh"],
+		subscribe => [File["/tmp/neutron/neutron_compt.sh"],File["/tmp/neutron/env/neutronrc.sh"]],
 		notify => Class["neutron::service"],
 	}	
 
@@ -60,11 +60,12 @@ if $nodetype == 'cntrnode' {
 		require => File['/tmp/neutron/'],
 		notify => Exec['exec_neutron_network'],
 	}
+
 	exec { "exec_neutron_network":
 		command => "bash -c '/tmp/neutron/neutron_network.sh'",
 		path => ["/bin/","/usr/bin/"],
 		refreshonly => true,
-		subscribe => File["/tmp/neutron/neutron_network.sh"],
+		subscribe => [ File["/tmp/neutron/neutron_network.sh"],File["/tmp/neutron/env/neutronrc.sh"]],
 		notify => Class["neutron::service"],
 	}	
 

@@ -183,8 +183,8 @@ node 'comptnode.iec.inventec' {
 
 	include base
 
-	$nOVA_DBPASS = 'NOVA_DBPASS'
-	$nOVA_PASS = 'NOVA_PASS'
+	$nOVA_DBPASS = '222222'
+	$nOVA_PASS = '111111'
 	$nOVA_EMAIL = 'NOVA_EMAIL'
 
 	include nova
