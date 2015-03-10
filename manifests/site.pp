@@ -120,9 +120,12 @@ node 'networknode.iec.inventec' {
 	$nIC_DEV_NAME_03 = 'em3'
 	$nIC_DEV_NAME_04 = 'em4'
 
-	$node_type = 'networknode'
-	$rabbitpwd = 'RABBIT_PASS'
+
 	$nodetype = 'networknode'
+	$node_type = 'networknode'
+
+	$rabbitpwd = 'RABBIT_PASS'
+
 	$rABBIT_HOST = 'cntrnode'
 	$rABBIT_PASS = 'RABBIT_PASS'
 

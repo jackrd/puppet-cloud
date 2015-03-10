@@ -9,12 +9,15 @@ node_type=$1
 if [ "$node_type" == "comptnode" ]
 then
 	ip_address=$MGMT_NETIP_COMPUTE1
-elif [ "$node_type" == "cntrnode" ]
+	ip_address2=$INST_TUNIP_COMPUTE1
+elif [ "$node_type" == "networknode" ]
 then
-	ip_address=$MGMT_NETIP_CONTROLLER
-else
 	ip_address=$MGMT_NETIP_NETWORK
+	ip_address2=$INST_TUNIP_NETWORK
+else
+	ip_address=$MGMT_NETIP_CONTROLLER
 fi	
+
 #####################################################################################
 # Configuration File
 
@@ -37,6 +40,7 @@ sed -i '/^\s*$/d' $HOSTS_CONF
 
 #####################################################################################
 # Edit the/etc/ntp.conf
+
 sed -i "/server 127.127.1.0/d" $NTP_CONF
 sed -i "/fudge 127.127.1.0 stratum 10/d" $NTP_CONF
 
@@ -48,7 +52,7 @@ fudge 127.127.1.0 stratum 10 \\
 #####################################################################################
 # Edit the /etc/mysql/my.cnf 
 
-if [ "$node_type" == "comptnode" ]
+if [ "$node_type" == "cntrnode" ]
 then
 	
 # Setup mysql to support utf8 and innodb
@@ -67,22 +71,23 @@ init-connect = 'SET NAMES utf8' \\
 character-set-server = utf8 \\
 bind-address = 0.0.0.0 \\
 " $MYSQL_CONF
-#rabbitmqctl change_password guest RABBIT_PASS
+rabbitmqctl change_password guest $RABBIT_PASS
 fi
 
 #####################################################################################
 # Edit the /etc/network/interfaces 
-sed -i "/^#/d" $IFACES_CONF
+
 sed -i "/^auto/d" $IFACES_CONF
 sed -i "/^iface/d" $IFACES_CONF
 sed -i "/^address/d" $IFACES_CONF
 sed -i "/^netmask/d" $IFACES_CONF
 sed -i "/^gateway/d" $IFACES_CONF
+echo " " >> $IFACES_CONF
+
 
 # loopback interface
 sed -i "1 i\auto lo \\
 iface lo inet loopback \\
-
 " $IFACES_CONF
 
 # management interface
@@ -91,18 +96,35 @@ iface $NIC_DEV_NAME_01 inet static \\
 address $ip_address \\
 netmask $MGMT_NETMASK \\
 #gateway $MGMT_GATEWAY \\
-
 " $IFACES_CONF
 
-# external interface
+if [ "$node_type" == "comptnode" ] || [ "$node_type" == "networknode" ]
+then
+# tunnel interface
 sed -i "1 i\auto $NIC_DEV_NAME_02 \\
-iface $NIC_DEV_NAME_02 inet dhcp \\
-
+iface $NIC_DEV_NAME_02 inet static \\
+address $ip_address2 \\
+netmask $MGMT_NETMASK \\
 " $IFACES_CONF
+fi
+
+if [ "$node_type" == "networknode" ]
+then
+# external interface
+sed -i "1 i\auto $NIC_DEV_NAME_03 \\
+iface $NIC_DEV_NAME_03 inet manual \\
+up ip link set $NIC_DEV_NAME_03 promisc on \\
+" $IFACES_CONF
+
+# external bridge
+sed -i "1 i\auto br-ex \\
+iface br-ex inet dhcp \\
+" $IFACES_CONF
+fi
 
 #####################################################################################
 # Edit the /etc/hosts 
-sed -i "/^#/d" $HOSTS_CONF
+
 sed -i "/cntrnode/d" $HOSTS_CONF
 sed -i "/networknode/d" $HOSTS_CONF
 sed -i "/comptnode/d" $HOSTS_CONF

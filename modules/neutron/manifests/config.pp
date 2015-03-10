@@ -48,7 +48,7 @@ if $nodetype == 'cntrnode' {
 		path => ["/bin/","/usr/bin/"],
 		refreshonly => true,
 		subscribe => [File["/tmp/neutron/neutron_compt.sh"],File["/tmp/neutron/env/neutronrc.sh"]],
-		notify => Class["neutron::service"],
+		notify => [Class["neutron::service"],Class["nova::service"] ],
 	}	
 
 

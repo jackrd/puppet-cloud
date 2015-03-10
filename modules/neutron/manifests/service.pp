@@ -12,7 +12,7 @@ class neutron::service {
 
 	} elsif $nodetype == 'comptnode' {
 
-		service { ["neutron-plugin-openvswitch-agent",]:
+		service { ["neutron-plugin-openvswitch-agent","openvswitch-switch"]:
 			ensure => running,
 			hasstatus => true,
 			hasrestart => true,
