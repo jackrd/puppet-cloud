@@ -28,6 +28,9 @@ sed -i '/^\s*$/d' $APACHE2_CONF
 # the addresses you wish to access the dashboard from
 # Grab our IP
 
+ifdown $NIC_DEV_NAME_02
+ifup $NIC_DEV_NAME_02
+
 EXT_IP=$(/sbin/ifconfig $NIC_DEV_NAME_02| sed -n 's/.*inet *addr:\([0-9\.]*\).*/\1/p')
 
 sed -i "/^ALLOWED_HOSTS/d" $HORIZON_CONF

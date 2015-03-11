@@ -4,19 +4,7 @@
 #!/bin/bash
 
 source /tmp/env/setuprc.sh
-node_type=$1
-
-if [ "$node_type" == "comptnode" ]
-then
-	ip_address=$MGMT_NETIP_COMPUTE1
-	ip_address2=$INST_TUNIP_COMPUTE1
-elif [ "$node_type" == "networknode" ]
-then
-	ip_address=$MGMT_NETIP_NETWORK
-	ip_address2=$INST_TUNIP_NETWORK
-else
-	ip_address=$MGMT_NETIP_CONTROLLER
-fi	
+node_type=$1	
 
 #####################################################################################
 # Configuration File
@@ -84,6 +72,17 @@ sed -i "/^netmask/d" $IFACES_CONF
 sed -i "/^gateway/d" $IFACES_CONF
 echo " " >> $IFACES_CONF
 
+if [ "$node_type" == "comptnode" ]
+then
+	ip_address=$MGMT_NETIP_COMPUTE1
+	ip_address2=$INST_TUNIP_COMPUTE1
+elif [ "$node_type" == "networknode" ]
+then
+	ip_address=$MGMT_NETIP_NETWORK
+	ip_address2=$INST_TUNIP_NETWORK
+else
+	ip_address=$MGMT_NETIP_CONTROLLER
+fi
 
 # loopback interface
 sed -i "1 i\auto lo \\
@@ -97,6 +96,13 @@ address $ip_address \\
 netmask $MGMT_NETMASK \\
 #gateway $MGMT_GATEWAY \\
 " $IFACES_CONF
+
+if [ "$node_type" == "cntrnode" ]
+then
+sed -i "1 i\auto $NIC_DEV_NAME_02 \\
+iface $NIC_DEV_NAME_02 inet dhcp \\
+" $IFACES_CONF
+fi
 
 if [ "$node_type" == "comptnode" ] || [ "$node_type" == "networknode" ]
 then

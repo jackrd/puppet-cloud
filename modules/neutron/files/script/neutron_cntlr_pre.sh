@@ -10,10 +10,8 @@ keystone user-role-add --user neutron --tenant service --role admin
 
 keystone service-create --name neutron --type network --description "OpenStack Networking"
 
-keystone endpoint-create \
-  --service-id $(keystone service-list | awk '/ network / {print $2}') \
-  --publicurl http://$MGMT_NETIP_CONTROLLER:9696 \
-  --adminurl http://$MGMT_NETIP_CONTROLLER:9696 \
-  --internalurl http://$MGMT_NETIP_CONTROLLER:9696
+SERVICE_ID=$(keystone service-list | awk '/ network / {print $2}')
+
+keystone endpoint-create  --service-id  $SERVICE_ID --publicurl http://$MGMT_NETIP_CONTROLLER:9696 --adminurl http://$MGMT_NETIP_CONTROLLER:9696 --internalurl http://$MGMT_NETIP_CONTROLLER:9696
 
 exit 0
