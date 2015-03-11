@@ -120,6 +120,7 @@ sed -i "/\[ml2_type_gre\]/a \\
 tunnel_id_ranges = 1:1000
 " $ML2_CONF
 
+sed -i "1 i [ovs]" $ML2_CONF
 sed -i "/\[ovs\]/a \\
 local_ip = $INST_TUNIP_COMPUTE1 \\
 tunnel_type = gre \\
