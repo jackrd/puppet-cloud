@@ -38,7 +38,7 @@ node 'cntrnode.iec.inventec' {
 	$aDMIN_TOKEN = 'ADMIN_TOKEN'
 	
 	$aUTH_HOST = 'cntrnode'
-
+	$db_username = 'root'
 	$db_passwd = '111111'
 
 	include base
@@ -54,7 +54,7 @@ node 'cntrnode.iec.inventec' {
 	$serviceDesc = 'service Desc'
 	
 	$kEYSTONE_DBPASS = '111111'
-	$kEYSTONE_PASS = '111111'
+	
 	$keystone_db_name = 'keystone'
 	$keystone_db_passwd = '111111'
 

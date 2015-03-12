@@ -1,25 +1,21 @@
-class keystone::dbsetting {
+define keystone::dbsetting( $username, $passwd,$db_name, $db_passwd) {
 
-	file { '/tmp/keystone/db.sh':
-		source => 'puppet:///modules/keystone/script/db.sh',
-		mode => 777,
-		require => File['/tmp/keystone/'],
-	}
-
-	exec {"exec_keystone_db":
-		cwd => '/tmp/keystone/',
-		command => "/tmp/keystone/db.sh ${username} ${passwd} ${keystone_db_name} ${keystone_db_passwd}",
-		path => ["/bin/","/usr/bin/"],
-		refreshonly => true,
-		subscribe => [ Package["keystone"],File["/tmp/keystone/db.sh"] ],
-	}
+	exec { "create-keystone-db":
+   		 unless  => "/usr/bin/mysql -u${user} -p${password} ${name}",
+    		  command => "/usr/bin/mysql -u${username} -p${passwd} -e \"create database ${db_name}; grant all privileges on ${db_name}.* to ${db_name}@'localhost' identified by '${db_passwd}'; grant all privileges on ${db_name}.* to ${db_name}@'%' identified by '${db_passwd}';\"",
+		 require => Service['mysql'],
+		  refreshonly => true,
+		  subscribe => Package['keystone'],
+		  notify => Exec['exec_keystone_dbsync'],
+  }
 
 	exec {"exec_keystone_dbsync":
 		cwd => '/tmp/keystone/',
 		command => "keystone-manage --nodebug db_sync",
-		path => ["/bin/","/usr/bin/"],
 		refreshonly => true,
-		subscribe => Exec["exec_keystone_db"],
+		 subscribe =>  Exec['create-keystone-db'],
+		notify => Exec['exec_keystone'],
+		path => ["/bin/","/usr/bin/"],
 	}
 
 }

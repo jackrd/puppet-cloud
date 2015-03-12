@@ -15,12 +15,18 @@ class keystone::config {
 		notify => Class["keystone::service"],
 	}
 
-	
-	#exec { "exec_keystone_createEndpoint":
-	#	command => "keystone endpoint-create --service-id $(keystone service-list | awk '/ identity ${serviceName} --type ${serviceType} --description ${serviceDesc}",
-	#	path => ["/bin/","/usr/bin/"],
-	#	refreshonly => true,
-	#	subscribe => Package["keystone"],
-	#}
+	file { '/tmp/keystone/keystone_post.sh':
+		source => 'puppet://puppet/modules/keystone/script/keystone_post.sh',
+		mode => 777,
+		require => File['/tmp/keystone/'],
+	}
+
+	exec { "exec_keystone_post":
+		command => "bash -c '/tmp/keystone/keystone_post.sh ${nodetype}'",
+		path => ["/bin/","/usr/bin/"],
+		require => Service['keystone'],
+		refreshonly => true,
+		subscribe => Package['keystone'],
+	}
 
 }
