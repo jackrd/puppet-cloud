@@ -17,6 +17,8 @@ neutron router-interface-add demo-router demo-subnet
 
 neutron router-gateway-set demo-router ext-net
 
+source /tmp/base/env/admin-closerc.sh
+
 exit 0
 
 

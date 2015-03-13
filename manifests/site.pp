@@ -14,8 +14,6 @@ node 'cntrnode.iec.inventec' {
 	$mGMT_NETIP_CONTROLLER = '192.168.0.11'
 	$mGMT_NETIP_NETWORK = '192.168.0.21'
 	$mGMT_NETIP_COMPUTE1 = '192.168.0.14'
-	#$mgmtip_block1 = '192.168.0.14'
-	#$mgmtip_object1 = '192.168.0.15'
 
 	$mGMT_NETMASK = '255.255.255.0'
 	$mGMT_GATEWAY = '192.168.0.1'
@@ -38,20 +36,11 @@ node 'cntrnode.iec.inventec' {
 	$aDMIN_TOKEN = 'ADMIN_TOKEN'
 	
 	$aUTH_HOST = 'cntrnode'
+
 	$db_username = 'root'
 	$db_passwd = '111111'
 
 	include base
-	
-	$tenantName = 'admin'
-	$tenantDesc = 'tenant Desc'
-	$userName = 'admin'
-	$userpwd = 'admin_pass'
-	$userEmail = 'xxx@xxx.xxx'
-	$roleName = 'admin'
-	$serviceName = 'keystone'
-	$serviceType = 'identity'
-	$serviceDesc = 'service Desc'
 	
 	$kEYSTONE_DBPASS = '111111'
 	
@@ -60,11 +49,12 @@ node 'cntrnode.iec.inventec' {
 
 	include keystone
 
-	$gLANCE_DBPASS = '222222'
+	$gLANCE_DBPASS = '111111'
 	$gLANCE_PASS = '111111'
+	$gLANCE_EMAIL = 'GLANCE_EMAIL'
 		
 	$glance_db_name = 'glance'
-	$glance_db_passwd = '222222'
+	$glance_db_passwd = '111111'
 
 	include glance
 
@@ -73,25 +63,37 @@ node 'cntrnode.iec.inventec' {
 	$nOVA_EMAIL = 'NOVA_EMAIL'
 	
 	$nova_db_name = 'nova'
-	$nova_db_passwd = '222222'
+	$nova_db_passwd = '111111'
 
 	include nova
 
-	$nEUTRON_ADMIN_PASSWORD = '111111'
-	$nEUTRON_DBPASS = 'NEUTRON_DBPASS'
+
 	$nEUTRON_PASS = '111111'
-	$nEUTRON_EMAIL = 'NEUTRON_EMAIL'
-		
+	$nEUTRON_EMAIL = '111111'
+	$nEUTRON_DBPASS = '111111'		
+
 	$neutron_db_name = 'neutron'
 	$neutron_db_passwd = 'NEUTRON_DBPASS'
 
 	$mETADATA_SECRET = 'METADA_SECRET'
 	$iNTERFACE_NAME = 'em3'
 
+	$fLOATING_IP_START = '192.168.1.101'
+	$fLOATING_IP_END = '192.168.1.200'
+	$eXTERNAL_NETWORK_GATEWAY = '192.168.1.1' 
+	$eXTERNAL_NETWORK_CIDR ='192.168.1.0/24'
+
+	$tENANT_NETWORK_GATEWAY = '192.168.3.1' 
+	$tENANT_NETWORK_CIDR = '192.168.3.0/24'
+
+	$oS_USERNAME = 'admin'
+ 	$oS_PASSWORD = 'ADMIN_PASS'
+ 	$oS_TENANT_NAME = 'admin'
+	$oS_AUTH_URL = 'http://cntrnode:35357/v2.0'
+
 	include neutron
 
 	include horizon
-
 	#include test
 
 }
@@ -143,6 +145,19 @@ node 'networknode.iec.inventec' {
 	$nEUTRON_EMAIL = 'NEUTRON_EMAIL'
 	$mETADATA_SECRET = 'METADA_SECRET'
 	$iNTERFACE_NAME = 'em3'
+
+	$fLOATING_IP_START = '192.168.1.101'
+	$fLOATING_IP_END = '192.168.1.200'
+	$eXTERNAL_NETWORK_GATEWAY = '192.168.1.1' 
+	$eXTERNAL_NETWORK_CIDR ='192.168.1.0/24'
+
+	$tENANT_NETWORK_GATEWAY = '192.168.3.1' 
+	$tENANT_NETWORK_CIDR = '192.168.3.0/24'
+
+	$oS_USERNAME = 'admin'
+ 	$oS_PASSWORD = 'ADMIN_PASS'
+ 	$oS_TENANT_NAME = 'admin'
+	$oS_AUTH_URL = 'http://cntrnode:35357/v2.0'
 
 	include neutron
 
@@ -198,6 +213,19 @@ node 'comptnode.iec.inventec' {
 	$nEUTRON_EMAIL = 'NEUTRON_EMAIL'
 	$mETADATA_SECRET = 'METADA_SECRET'
 	$iNTERFACE_NAME = 'em3'
+
+	$fLOATING_IP_START = '192.168.1.101'
+	$fLOATING_IP_END = '192.168.1.200'
+	$eXTERNAL_NETWORK_GATEWAY = '192.168.1.1' 
+	$eXTERNAL_NETWORK_CIDR ='192.168.1.0/24'
+
+	$tENANT_NETWORK_GATEWAY = '192.168.3.1' 
+	$tENANT_NETWORK_CIDR = '192.168.3.0/24'
+
+	$oS_USERNAME = 'admin'
+ 	$oS_PASSWORD = 'ADMIN_PASS'
+ 	$oS_TENANT_NAME = 'admin'
+	$oS_AUTH_URL = 'http://cntrnode:35357/v2.0'
 
 	include neutron
 	

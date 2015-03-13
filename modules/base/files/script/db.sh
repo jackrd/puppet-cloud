@@ -1,30 +1,42 @@
-#!/usr/bin/expect -f
+#!/bin/bash
 
-set db_passwd [lindex $argv 0];
+# 1.) enforce password as parameter
 
-set timeout 3
+if [ ! $1 ]; then
+	echo 'password is required'
+	exit 1;
+else
+    password=$1
+fi;
+
+# 2.) automatically call mysql_secure_installation
+
+expect -c "
 spawn mysql_secure_installation
 
-#expect \"mysql>\"
+set password [lindex $argv 0]
+ 
+expect \"Enter current password for root (enter for none):\"
+send \"$password\r\"
 
-expect "Enter current password for root (enter for none):"
-send "$db_passwd\r"
- 
-expect "Change the root password?"
-send "n\r"
- 
-expect "Remove anonymous users?"
-send "y\r"
- 
-expect "Disallow root login remotely?"
-send "y\r"
- 
-expect "Remove test database and access to it?"
-send "y\r"
- 
-expect "Reload privilege tables now?"
-send "y\r"
- 
-expect eof
+expect \"Change the root password?\"
+send \"y\r\"
 
-return 0
+expect \"Remove anonymous users?\"
+send \"y\r\"
+
+expect \"Disallow root login remotely?\"
+send \"y\r\"
+
+expect \"Remove test database and access to it?\"
+send \"y\r\"
+
+expect \"Reload privilege tables now?\"
+send \"y\r\"
+
+puts \"Ended expect script.\"
+"
+
+# 3.) create .ran file indicating mysql was secured
+
+touch `which mysql_secure_installation`.ran

@@ -13,6 +13,11 @@ keystone service-create --name=nova --type=compute  --description="OpenStack Com
 
 SERVICE_ID=$(keystone service-list | awk '/ compute / {print $2}')
 
+if [ "$SERVICE_ID" == '0' ]
+then
+
 keystone endpoint-create --service-id= $SERVICE_ID  --publicurl=http://$cntrnode:8774/v2/%\(tenant_id\)s --internalurl=http://$cntrnode:8774/v2/%\(tenant_id\)s --adminurl=http://$cntrnode:8774/v2/%\(tenant_id\)s
+
+fi
 
 exit 0

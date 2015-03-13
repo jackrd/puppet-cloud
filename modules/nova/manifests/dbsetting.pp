@@ -1,26 +1,32 @@
-class nova::dbsetting {
+define nova::dbsetting( $username, $passwd,$db_name, $db_passwd) {
+
+
+	exec { "exec_nova_remove_default_db":
+		command => "rm /var/lib/nova/nova.sqlite",
+		path => ["/bin/","/usr/bin/"],
+		refreshonly => true,
+		subscribe => Class['nova::install'],
+	}
 
 	if $nodetype == 'cntrnode' {
 
-		file { '/tmp/nova/db.sh':
-			source => 'puppet:///modules/nova/script/db.sh',
-			mode => 777,
-			require => File['/tmp/nova/'],
-		}
+	exec { "create-nova-db":
+   		   unless  => "/usr/bin/mysql -u${user} -p${password} ${name}",
+    		  command => "/usr/bin/mysql -u${username} -p${passwd} -e \"create database ${db_name}; grant all privileges on ${db_name}.* to ${db_name}@'localhost' identified by '${db_passwd}'; grant all privileges on ${db_name}.* to ${db_name}@'%' identified by '${db_passwd}';\"",
+		   require => Service['mysql'],
+		  refreshonly => true,
+		  subscribe => Package['nova-api'],
+		  notify => Exec['exec_nova_dbsync'],
+ 	}
 
-		exec {"exec_nova_db":
-			cwd => '/tmp/nova/',
-			command => "/tmp/nova/db.sh ${username} ${passwd} ${nova_db_name} ${nova_db_passwd}",
-			path => ["/bin/","/usr/bin/"],
-			refreshonly => true,
-			subscribe => [ Package["nova-api"], File["/tmp/nova/db.sh"] ],
-		}
+	exec {"exec_nova_dbsync":
+		cwd => '/tmp/nova/',
+		command => "nova-manage --nodebug db sync",
+		path => ["/bin/","/usr/bin/"],
+		refreshonly => true,
+		subscribe =>  Exec['create-nova-db'],
+		notify => Exec['exec_nova_cntlr'],
+	}
 
-		exec {"exec_nova_dbsync":
-			command => "nova-manage --nodebug db sync",
-			path => ["/bin/","/usr/bin/"],
-			refreshonly => true,
-			subscribe => Exec["exec_nova_db"],
-		}
 	}
 }

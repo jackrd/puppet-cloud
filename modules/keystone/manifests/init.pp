@@ -5,7 +5,7 @@ class keystone {
 	include keystone::install
 	include keystone::env
 	#include keystone::dbsetting
-	keystone::dbsetting { 'db':
+	keystone::dbsetting { 'db_keystone':
 		username =>$db_username,
 		passwd => $db_passwd,
 		db_name => $keystone_db_name,
