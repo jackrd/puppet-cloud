@@ -9,11 +9,12 @@ class nova::config {
 		}
 
 		exec { "exec_nova_pre_cntlr":
-			 command => "bash -c '/tmp/nova/nova_cntlr_pre.sh ${nodetype}'",
+			 command => "bash -c '/tmp/nova/nova_cntlr_pre.sh ${nodetype} ${gLANCE_PASS} ${gLANCE_EMAIL}'",
 			 path => ["/bin/","/usr/bin/"],
-			 refreshonly => true,
-			 subscribe => Class['nova::install'],
-			 notify => Exec['exec_nova_cntlr'],
+			 require => Service['keystone'],
+			  refreshonly => true,
+			 subscribe => [Class['nova::install'],File['/tmp/nova/nova_cntlr_pre.sh']],
+			 #notify => Exec['exec_nova_cntlr'],
 		}	
 
 		file { '/tmp/nova/nova_cntlr.sh':

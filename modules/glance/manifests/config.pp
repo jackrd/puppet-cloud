@@ -7,11 +7,11 @@ class glance::config {
 	}
 
 	exec { "exec_glance_pre":
-		command => "bash -c '/tmp/glance/glance_pre.sh'",
+		command => "bash -c '/tmp/glance/glance_pre.sh ${nodetype} ${gLANCE_PASS} ${gLANCE_EMAIL}'",
 		path => ["/bin/","/usr/bin/"],
+		require =>  Service['keystone'],
 		refreshonly => true,
-		subscribe => Package['glance'],
-		notify => Exec['exec_glance'],
+		subscribe => [Class['glance::install'],File['/tmp/glance/glance_pre.sh']],
 	}	
 
 

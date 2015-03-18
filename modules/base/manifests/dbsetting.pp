@@ -25,7 +25,7 @@ class base::dbsetting {
 			 creates => "/tmp/base/mysql_secure_installation.ran",
 			 logoutput => true,
 			 refreshonly => true,
-			 subscribe => [ Exec["exec_init_db"], File["/tmp/base/db.sh"] ],
+			 subscribe => Exec["exec_init_db"],
 			 require => Service['mysql'],
 		}
 

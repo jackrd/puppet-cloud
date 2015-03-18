@@ -1,22 +1,21 @@
 #!/bin/bash
 
-source /tmp/env/setuprc.sh
-source /tmp/glance/env/glancerc.sh
-
 CNTR_NODE=$1
+GLANCE_PASS=$2
+GLANCE_EMAIL=$3
 
 keystone user-create --name=glance --pass=$GLANCE_PASS  --email=$GLANCE_EMAIL
 
 keystone user-role-add --user=glance --tenant=service --role=admin
 
-keystone service-create --name=glance --type=image  --description="OpenStack Image Service"
-
 SERVICE_ID=$(keystone service-list | awk '/ image / {print $2}')
 
-if [ "$SERVICE_ID" == '0' ]
+if [ "$SERVICE_ID" == '' ]
 then
 
-keystone endpoint-create  --service-id=$SERVICE_ID --publicurl=http://$CNTR_NODE:9292  --internalurl=http://$CNTR_NODE:9292  --adminurl=http://$CNTR_NODE:9292
+keystone service-create --name=glance --type=image  --description="OpenStack Image Service"
+
+keystone endpoint-create  --service-id=$(keystone service-list | awk '/ image / {print $2}') --publicurl=http://$CNTR_NODE:9292  --internalurl=http://$CNTR_NODE:9292  --adminurl=http://$CNTR_NODE:9292
 
 fi
 

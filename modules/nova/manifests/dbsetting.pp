@@ -2,7 +2,7 @@ define nova::dbsetting( $username, $passwd,$db_name, $db_passwd) {
 
 
 	exec { "exec_nova_remove_default_db":
-		command => "rm /var/lib/nova/nova.sqlite",
+		command => "rm -rf /var/lib/nova/nova.sqlite",
 		path => ["/bin/","/usr/bin/"],
 		refreshonly => true,
 		subscribe => Class['nova::install'],

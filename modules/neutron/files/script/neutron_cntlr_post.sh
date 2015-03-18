@@ -1,7 +1,12 @@
 #!/bin/bash
 
-source /tmp/base/env/admin-openrc.sh
-source /tmp/neutron/env/neutronrc.sh
+FLOATING_IP_START=$1
+FLOATING_IP_END=$2
+EXTERNAL_NETWORK_GATEWAY=$3
+EXTERNAL_NETWORK_CIDR=$4
+
+TENANT_NETWORK_GATEWAY=$5
+TENANT_NETWORK_CIDR=$6
 
 neutron net-create ext-net --shared --router:external=True
 
@@ -16,8 +21,6 @@ neutron router-create demo-router
 neutron router-interface-add demo-router demo-subnet
 
 neutron router-gateway-set demo-router ext-net
-
-source /tmp/base/env/admin-closerc.sh
 
 exit 0
 

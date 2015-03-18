@@ -151,10 +151,10 @@ sed -i "/^mechanism_drivers/d" $ML2_CONF
 sed -i "/^tunnel_id_ranges/d" $ML2_CONF
 sed -i "/^local_ip/d" $ML2_CONF
 sed -i "/^tunnel_type/d" $ML2_CONF
-sed -i "/^enbale_tunneling/d" $ML2_CONF
+sed -i "/^enable_tunneling /d" $ML2_CONF
 sed -i "/^firewall_driver/d" $ML2_CONF
 sed -i "/^enable_security_group/d" $ML2_CONF
-
+sed -i "/^\[ovs\]/d" $ML2_CONF
 
 sed -i "/^\[ml2\]/a \\
 type_drivers = gre \\
@@ -171,7 +171,7 @@ sed -i "1 i [ovs]" $ML2_CONF
 sed -i "/^\[ovs\]/a \\
 local_ip = $INST_TUNIP_NETWORK \\
 tunnel_type = gre \\
-enable_tunneling = True 
+enable_tunneling = True
 " $ML2_CONF
 
 sed -i "/^\[securitygroup\]/a \\

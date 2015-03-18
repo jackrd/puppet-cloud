@@ -10,6 +10,7 @@
 source /tmp/env/setuprc.sh
 source /tmp/neutron/env/neutronrc.sh
 source /tmp/nova/env/novarc.sh
+source /tmp/neutron/env/admin-openrc.sh
 
 # Configuration File
 
@@ -150,4 +151,5 @@ neutron_metadata_proxy_shared_secret = $METADATA_SECRET \\
 security_group_api = neutron
 " $NOVA_CONF
 
+source /tmp/neutron/env/admin-closerc.sh
 exit 0

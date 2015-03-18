@@ -1,21 +1,21 @@
 #!/bin/bash
 
-source /tmp/env/setuprc.sh
-source /tmp/neutron/env/neutronrc.sh
-
+CNTRNODE=$1
+NEUTRON_PASS=$2
+NEUTRON_EMAIL=$3
 
 keystone user-create --name neutron --pass $NEUTRON_PASS --email $NEUTRON_EMAIL
 
 keystone user-role-add --user neutron --tenant service --role admin
 
-keystone service-create --name neutron --type network --description "OpenStack Networking"
-
 SERVICE_ID=$(keystone service-list | awk '/ network / {print $2}')
 
-if [ "$SERVICE_ID" == '0' ]
+if [ "$SERVICE_ID" == '' ]
 then
 
-keystone endpoint-create  --service-id  $SERVICE_ID --publicurl http://$MGMT_NETIP_CONTROLLER:9696 --adminurl http://$MGMT_NETIP_CONTROLLER:9696 --internalurl http://$MGMT_NETIP_CONTROLLER:9696
+keystone service-create --name neutron --type network --description "OpenStack Networking"
+
+keystone endpoint-create  --service-id  $(keystone service-list | awk '/ network / {print $2}') --publicurl http://$CNTRNODE:9696 --adminurl http://$CNTRNODE:9696 --internalurl http://$CNTRNODE:9696
 
 fi
 

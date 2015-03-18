@@ -6,7 +6,7 @@ define neutron::dbsetting( $username, $passwd,$db_name, $db_passwd) {
 			 command => "/usr/bin/mysql -u${username} -p${passwd} -e \"create database ${db_name}; grant all privileges on ${db_name}.* to ${db_name}@'localhost' identified by '${db_passwd}'; grant all privileges on ${db_name}.* to ${db_name}@'%' identified by '${db_passwd}';\"",
 			 require => Service['mysql'],
 			 refreshonly => true,
-			 subscribe => Package['neutron-server'],
+			 subscribe => Class['neutron::install'],
 			 notify => Exec['exec_neutron_dbsync'],
 		}
 
@@ -14,6 +14,7 @@ define neutron::dbsetting( $username, $passwd,$db_name, $db_passwd) {
 			 cwd => '/tmp/neutron/',
 			 command => "neutron-manage --nodebug db_sync",
 			 path => ["/bin/","/usr/bin/"],
+			  require => Class['neutron::install'],
 			 refreshonly => true,
 			 subscribe =>  Exec['create-neutron-db'],
 

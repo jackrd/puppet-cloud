@@ -1,7 +1,7 @@
 define keystone::dbsetting( $username, $passwd,$db_name, $db_passwd) {
 
 	exec { "exec_keystone_remove_default_db":
-		command => "rm /var/lib/keystone/keystone.sqlite",
+		command => "rm -rf /var/lib/keystone/keystone.sqlite",
 		path => ["/bin/","/usr/bin/"],
 		refreshonly => true,
 		subscribe => Class['keystone::install'],

@@ -62,6 +62,7 @@ sed -i "/^admin_password/d" $NEUTRON_CONF
 sed -i "/^rpc_backend/d" $NEUTRON_CONF
 sed -i "/^rabbit_host/d" $NEUTRON_CONF
 sed -i "/^rabbit_password/d" $NEUTRON_CONF
+sed -i "/^verbose/d" $NEUTRON_CONF
 
 sed -i "/^core_plugin/d" $NEUTRON_CONF
 sed -i "/^service_plugins/d" $NEUTRON_CONF
@@ -74,7 +75,7 @@ service_plugins = router \\
 allow_overlapping_ips = True \\
 rpc_backend = neutron.openstack.common.rpc.impl_kombu \\
 rabbit_host = cntrnode \\
-rabbit_password = RABBIT_PASS \\
+rabbit_password = $RABBIT_PASS \\
 verbose = True \\
 " $NEUTRON_CONF
 
@@ -85,7 +86,7 @@ auth_protocol = http \\
 auth_port = 35357 \\
 admin_tenant_name = service \\
 admin_user = neutron \\
-admin_password = $NEUTRON_ADMIN_PASSWORD
+admin_password = $NEUTRON_PASS
 " $NEUTRON_CONF
 
 
@@ -109,6 +110,7 @@ sed -i "/^enable_tunneling/d" $ML2_CONF
 
 sed -i "/^firewall_driver/d" $ML2_CONF
 sed -i "/^enable_security_group/d" $ML2_CONF
+sed -i "/^\[ovs\]/d" $ML2_CONF
 
 sed -i "/\[ml2\]/a \\
 type_drivers = gre \\
@@ -161,7 +163,7 @@ neutron_url = http://$MGMT_NETIP_CONTROLLER:9696 \\
 neutron_auth_strategy = keystone \\
 neutron_admin_tenant_name = service \\
 neutron_admin_username = neutron \\
-neutron_admin_password = $NEUTRON_ADMIN_PASSWORD \\
+neutron_admin_password = $NEUTRON_PASS \\
 neutron_admin_auth_url = http://$MGMT_NETIP_CONTROLLER:35357/v2.0 \\
 linuxnet_interface_driver = nova.network.linux_net.LinuxOVSInterfaceDriver \\
 firewall_driver = nova.virt.firewall.NoopFirewallDriver \\

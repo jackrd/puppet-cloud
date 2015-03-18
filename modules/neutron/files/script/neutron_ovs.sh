@@ -1,8 +1,7 @@
 #!/bin/bash
 
-source /tmp/neutron/env/neutronrc.sh
-
 nodetype=$1
+INTERFACE_NAME=$2
 
 if [ "$nodetype" == "networknode" ]
 then

@@ -9,11 +9,12 @@ class neutron::config {
 		}
 
 		exec { "exec_neutron_pre_cntlr":
-			 command => "bash -c '/tmp/neutron/neutron_cntlr_pre.sh'",
+			 command => "bash -c '/tmp/neutron/neutron_cntlr_pre.sh ${nodetype} ${nEUTRON_PASS} ${nEUTRON_EMAIL}'",
 			 path => ["/bin/","/usr/bin/"],
-			 refreshonly => true,
-			 subscribe => Class['neutron::install'],
-			 notify => Exec['exec_neutron_cntlr'],
+			  require => Service['keystone'], 
+			  refreshonly => true,
+			 subscribe => [Class['neutron::install'],File['/tmp/neutron/neutron_cntlr_pre.sh']],
+			 #notify => Exec['exec_neutron_cntlr'],
 		}	
 
 		file { '/tmp/neutron/neutron_cntlr.sh':
@@ -38,10 +39,10 @@ class neutron::config {
 		}
 
 		exec { "exec_neutron_cntlr_post":
-			 command => "bash -c '/tmp/neutron/neutron_cntlr_post.sh'",
+			 command => "bash -c '/tmp/neutron/neutron_cntlr_post.sh ${fLOATING_IP_START } ${fLOATING_IP_END}  ${eXTERNAL_NETWORK_GATEWAY} ${eXTERNAL_NETWORK_CIDR}  ${tENANT_NETWORK_GATEWAY} ${tENANT_NETWORK_CIDR}'",
 			 path => ["/bin/","/usr/bin/"],
 			 refreshonly => true,
-			 subscribe => Class['neutron::install'],
+			 subscribe => [Class['neutron::install'],File['/tmp/neutron/neutron_cntlr_post.sh']],
 			 require => [File["/tmp/neutron/neutron_cntlr_post.sh"],Class['neutron::service']],
 		}	
 	} elsif $nodetype == 'comptnode' {
@@ -54,7 +55,7 @@ class neutron::config {
 
 		exec { "exec_neutron_compt_ovs":
 			 onlyif => ' service openvswitch-switch restart',
-			 command => "bash -c '/tmp/neutron/neutron_ovs.sh ${nodetype}'",
+			 command => "bash -c '/tmp/neutron/neutron_ovs.sh ${nodetype} ${iNTERFACE_NAME}'",
 			 path => ["/bin/","/usr/bin/"],
 			 refreshonly => true,
 			 subscribe => Class['neutron::install'],

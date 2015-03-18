@@ -1,6 +1,6 @@
 node 'puppet.iec.inventec' {
  file { '/tmp/hello':
-                content => "Hello\n",
+                content => "Deploy a pxe server and a router(as Firewall) for accessing public network\n",
         }
 
 }
@@ -47,6 +47,14 @@ node 'cntrnode.iec.inventec' {
 	$keystone_db_name = 'keystone'
 	$keystone_db_passwd = '111111'
 
+	$oS_USERNAME = 'admin'
+ 	$oS_PASSWORD = 'ADMIN_PASS'
+ 	$oS_TENANT_NAME = 'admin'
+	$oS_AUTH_URL = 'http://cntrnode:35357/v2.0'
+
+	$os_service_token = 'ADMIN_TOKEN'
+	$os_service_endpoint = 'http://cntrnode:35357/v2.0'
+
 	include keystone
 
 	$gLANCE_DBPASS = '111111'
@@ -58,7 +66,7 @@ node 'cntrnode.iec.inventec' {
 
 	include glance
 
-	$nOVA_DBPASS = '222222'
+	$nOVA_DBPASS = '111111'
 	$nOVA_PASS = '111111'
 	$nOVA_EMAIL = 'NOVA_EMAIL'
 	
@@ -69,11 +77,11 @@ node 'cntrnode.iec.inventec' {
 
 
 	$nEUTRON_PASS = '111111'
-	$nEUTRON_EMAIL = '111111'
 	$nEUTRON_DBPASS = '111111'		
+	$nEUTRON_EMAIL = 'NEUTRON_EMAIL'
 
 	$neutron_db_name = 'neutron'
-	$neutron_db_passwd = 'NEUTRON_DBPASS'
+	$neutron_db_passwd = '111111'
 
 	$mETADATA_SECRET = 'METADA_SECRET'
 	$iNTERFACE_NAME = 'em3'
@@ -86,10 +94,6 @@ node 'cntrnode.iec.inventec' {
 	$tENANT_NETWORK_GATEWAY = '192.168.3.1' 
 	$tENANT_NETWORK_CIDR = '192.168.3.0/24'
 
-	$oS_USERNAME = 'admin'
- 	$oS_PASSWORD = 'ADMIN_PASS'
- 	$oS_TENANT_NAME = 'admin'
-	$oS_AUTH_URL = 'http://cntrnode:35357/v2.0'
 
 	include neutron
 
@@ -139,9 +143,8 @@ node 'networknode.iec.inventec' {
 
 	include base
 
-	$nEUTRON_ADMIN_PASSWORD = '111111'
-	$nEUTRON_DBPASS = 'NEUTRON_DBPASS'
-	$nEUTRON_PASS = 'NEUTRON_PASS'
+	$nEUTRON_PASS = '111111'
+	$nEUTRON_DBPASS = '111111'		
 	$nEUTRON_EMAIL = 'NEUTRON_EMAIL'
 	$mETADATA_SECRET = 'METADA_SECRET'
 	$iNTERFACE_NAME = 'em3'
@@ -201,15 +204,15 @@ node 'comptnode.iec.inventec' {
 
 	include base
 
-	$nOVA_DBPASS = '222222'
+	$nOVA_DBPASS = '111111'
 	$nOVA_PASS = '111111'
 	$nOVA_EMAIL = 'NOVA_EMAIL'
 
 	include nova
 
 	$nEUTRON_ADMIN_PASSWORD = '111111'
-	$nEUTRON_DBPASS = 'NEUTRON_DBPASS'
-	$nEUTRON_PASS = 'NEUTRON_PASS'
+	$nEUTRON_PASS = '111111'
+	$nEUTRON_DBPASS = '111111'		
 	$nEUTRON_EMAIL = 'NEUTRON_EMAIL'
 	$mETADATA_SECRET = 'METADA_SECRET'
 	$iNTERFACE_NAME = 'em3'

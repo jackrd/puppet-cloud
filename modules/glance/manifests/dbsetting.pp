@@ -2,7 +2,7 @@ define glance::dbsetting( $username, $passwd,$db_name, $db_passwd) {
 
 
 	exec { "exec_glance_remove_default_db":
-		command => "rm /var/lib/glance/glance.sqlite",
+		command => "rm -rf /var/lib/glance/glance.sqlite",
 		path => ["/bin/","/usr/bin/"],
 		refreshonly => true,
 		subscribe => Class['glance::install'],

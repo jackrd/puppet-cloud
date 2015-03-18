@@ -22,11 +22,12 @@ class keystone::config {
 	}
 
 	exec { "exec_keystone_post":
-		command => "bash -c '/tmp/keystone/keystone_post.sh ${nodetype}'",
+		environment => ["OS_SERVICE_TOKEN=${os_service_token}", "OS_SERVICE_ENDPOINT=${os_service_endpoint}"],
+		command => "bash -c '/tmp/keystone/keystone_post.sh ${nodetype} ${aDMIN_PASS} ${aDMIN_EMAIL}'",
 		path => ["/bin/","/usr/bin/"],
 		require => Service['keystone'],
 		refreshonly => true,
-		subscribe => Package['keystone'],
+		subscribe => [Package['keystone'],File["/tmp/keystone/keystone_post.sh"]],
 	}
 
 }

@@ -20,7 +20,7 @@ expect \"Enter current password for root (enter for none):\"
 send \"$password\r\"
 
 expect \"Change the root password?\"
-send \"y\r\"
+send \"n\r\"
 
 expect \"Remove anonymous users?\"
 send \"y\r\"
@@ -34,7 +34,7 @@ send \"y\r\"
 expect \"Reload privilege tables now?\"
 send \"y\r\"
 
-puts \"Ended expect script.\"
+expect eof
 "
 
 # 3.) create .ran file indicating mysql was secured
