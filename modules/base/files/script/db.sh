@@ -17,10 +17,19 @@ spawn mysql_secure_installation
 set password [lindex $argv 0]
  
 expect \"Enter current password for root (enter for none):\"
+send \"\r\"
+
+expect \"Set root password?\"
+send \"y\r\"
+
+expect \"New password:\"
 send \"$password\r\"
 
-expect \"Change the root password?\"
-send \"n\r\"
+expect \"Re-enter new password:\"
+send \"$password\r\"
+
+#expect \"Change the root password?\"
+#send \"n\r\"
 
 expect \"Remove anonymous users?\"
 send \"y\r\"

@@ -20,7 +20,7 @@ define glance::dbsetting( $username, $passwd,$db_name, $db_passwd) {
 	exec {"exec_glance_dbsync":
 		cwd => '/tmp/glance/',
 		path => ["/bin/","/usr/bin/"],
-		command => "glance-manage --nodebug db_sync",
+		command => "glance-manage --nodebug db_sync &> /tmp/glance/dbsync.txt",
 		refreshonly => true,
 		subscribe =>  Exec['create-glance-db'],
 		notify => Exec['exec_glance'],

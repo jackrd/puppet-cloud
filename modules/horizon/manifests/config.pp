@@ -1,7 +1,7 @@
 class horizon::config {
 
 	file { '/tmp/horizon/horizon.sh':
-		source => 'puppet://puppet/modules/horizon/script/horizon.sh',
+		source => 'puppet:///modules/horizon/script/horizon.sh',
 		mode => 777,
 		require => File['/tmp/horizon/'],
 	}

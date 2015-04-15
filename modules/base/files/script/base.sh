@@ -65,12 +65,12 @@ fi
 #####################################################################################
 # Edit the /etc/network/interfaces 
 
-sed -i "/^auto/d" $IFACES_CONF
-sed -i "/^iface/d" $IFACES_CONF
-sed -i "/^address/d" $IFACES_CONF
-sed -i "/^netmask/d" $IFACES_CONF
-sed -i "/^gateway/d" $IFACES_CONF
-echo " " >> $IFACES_CONF
+#sed -i "/^auto/d" $IFACES_CONF
+#sed -i "/^iface/d" $IFACES_CONF
+#sed -i "/^address/d" $IFACES_CONF
+#sed -i "/^netmask/d" $IFACES_CONF
+#sed -i "/^gateway/d" $IFACES_CONF
+echo " " > $IFACES_CONF
 
 if [ "$node_type" == "comptnode" ]
 then
@@ -94,7 +94,7 @@ sed -i "1 i\auto $NIC_DEV_NAME_01 \\
 iface $NIC_DEV_NAME_01 inet static \\
 address $ip_address \\
 netmask $MGMT_NETMASK \\
-#gateway $MGMT_GATEWAY \\
+gateway $MGMT_GATEWAY \\
 " $IFACES_CONF
 
 if [ "$node_type" == "cntrnode" ]
@@ -113,6 +113,10 @@ address $ip_address2 \\
 netmask $MGMT_NETMASK \\
 " $IFACES_CONF
 fi
+ifdown em1
+ifdown em2
+ifup em1
+ifup em2
 
 if [ "$node_type" == "networknode" ]
 then
@@ -126,6 +130,8 @@ up ip link set $NIC_DEV_NAME_03 promisc on \\
 sed -i "1 i\auto br-ex \\
 iface br-ex inet dhcp \\
 " $IFACES_CONF
+ifdown em3
+ifup em3
 fi
 
 #####################################################################################

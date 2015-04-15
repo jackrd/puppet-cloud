@@ -3,7 +3,7 @@ class nova::config {
 	if $nodetype == 'cntrnode' {
 
 		file { '/tmp/nova/nova_cntlr_pre.sh':
-			 source => 'puppet://puppet/modules/nova/script/nova_cntlr_pre.sh',
+			 source => 'puppet:///modules/nova/script/nova_cntlr_pre.sh',
 			 mode => 777,
 			 require => File['/tmp/nova/'],
 		}
@@ -18,7 +18,7 @@ class nova::config {
 		}	
 
 		file { '/tmp/nova/nova_cntlr.sh':
-			 source => 'puppet://puppet/modules/nova/script/nova_cntlr.sh',
+			 source => 'puppet:///modules/nova/script/nova_cntlr.sh',
 			 mode => 777,
 			 require => File['/tmp/nova/'],
 		}
@@ -34,7 +34,7 @@ class nova::config {
 	
 
 		file { '/tmp/nova/nova_compt.sh':
-			 source => 'puppet://puppet/modules/nova/script/nova_compt.sh',
+			 source => 'puppet:///modules/nova/script/nova_compt.sh',
 			 mode => 777,
 			 require => File['/tmp/nova/'],
 		}

@@ -13,7 +13,7 @@ class neutron::install {
 
 	} elsif $nodetype == 'comptnode' {
 
-		package { ["neutron-common", "neutron-plugin-ml2", "neutron-plugin-openvswitch-agent"]:
+		package { ["neutron-common", "neutron-plugin-ml2", "neutron-plugin-openvswitch-agent","openvswitch-switch"]:
 			ensure => installed,
 		}
 

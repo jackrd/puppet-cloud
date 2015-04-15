@@ -1,7 +1,7 @@
 class glance::config {
 
 	file { '/tmp/glance/glance_pre.sh':
-		source => 'puppet://puppet/modules/glance/script/glance_pre.sh',
+		source => 'puppet:///modules/glance/script/glance_pre.sh',
 		mode => 777,
 		require => File['/tmp/glance/'],
 	}
@@ -16,7 +16,7 @@ class glance::config {
 
 
 	file { '/tmp/glance/glance.sh':
-		source => 'puppet://puppet/modules/glance/script/glance.sh',
+		source => 'puppet:///modules/glance/script/glance.sh',
 		mode => 777,
 		require => File['/tmp/glance/'],
 	}
