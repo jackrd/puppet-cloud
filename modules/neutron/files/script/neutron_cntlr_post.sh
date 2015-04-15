@@ -17,6 +17,7 @@ echo $EXTERNAL_NETWORK_CIDR >> /tmp/neutron/neutron_cntlr_post.txt
 echo $TENANT_NETWORK_GATEWAY >> /tmp/neutron/neutron_cntlr_post.txt
 echo $TENANT_NETWORK_CIDR >> /tmp/neutron/neutron_cntlr_post.txt
 
+sleep 50
 
 neutron net-create ext-net --shared --router:external=True &>> /tmp/neutron/neutron_cntlr_post.txt
 
