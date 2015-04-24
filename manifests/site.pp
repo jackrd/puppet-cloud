@@ -1,5 +1,6 @@
 node 'puppetmaster.iec.inventec' {
- file { '/tmp/hello':
+
+ 	file { '/tmp/hello':
                 content => "Deploy a pxe server and a router(as Firewall) for accessing public network\n",
         }
 
@@ -7,26 +8,23 @@ node 'puppetmaster.iec.inventec' {
 
 node 'cntrnode.iec.inventec' {
 
-	class openstack {
-		nodetype => 'cntrnode',
-	}
-
+	hiera_include('classes')
 }
 
 node 'networknode.iec.inventec' {
 	
-	class openstack {
-		nodetype => 'networknode',
-	}
-
-
+	hiera_include('classes')
 }
 
 node 'comptnode.iec.inventec' {
 	
-	class openstack {
-		nodetype => 'comptnodenode',
-	}
-
+	hiera_include('classes')
 }
+
+node 'blocknode.iec.inventec' {
+	
+	hiera_include('classes')
+}
+
+
 
