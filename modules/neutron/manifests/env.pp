@@ -1,4 +1,4 @@
-class neutron::env {
+class neutron::env inherits neutron{
 	
 	include neutron::params
 
@@ -15,16 +15,4 @@ class neutron::env {
 		content => template("neutron/env/neutronrc.sh.erb"),
 		mode => 777,
 	}
-
-	file { '/tmp/neutron/env/admin-openrc.sh':
-		ensure => present,
-		content => template("neutron/env/admin-openrc.sh.erb"),
-		mode => 777,
-	}
-
-	file { '/tmp/neutron/env/admin-closerc.sh':
-		source => 'puppet:///modules/neutron/script/admin-closerc.sh',
-		mode => 777,
-	}
-
 }

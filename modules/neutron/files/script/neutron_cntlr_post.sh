@@ -8,7 +8,7 @@ EXTERNAL_NETWORK_CIDR=$4
 TENANT_NETWORK_GATEWAY=$5
 TENANT_NETWORK_CIDR=$6
 
-source /tmp/neutron/env/admin-openrc.sh
+source /tmp/base/env/admin-openrc.sh
 
 echo $FLOATING_IP_START > /tmp/neutron/neutron_cntlr_post.txt
 echo $FLOATING_IP_END >> /tmp/neutron/neutron_cntlr_post.txt

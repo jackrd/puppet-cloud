@@ -4,7 +4,9 @@
 #!/bin/bash
 
 source /tmp/env/setuprc.sh
-node_type=$1	
+
+node_type=$1
+BLOCKNODE_NUM=$2	
 
 #####################################################################################
 # Configuration File
@@ -59,6 +61,8 @@ init-connect = 'SET NAMES utf8' \\
 character-set-server = utf8 \\
 bind-address = 0.0.0.0 \\
 " $MYSQL_CONF
+
+#change rabbitmq-server password
 rabbitmqctl change_password guest $RABBIT_PASS
 fi
 
@@ -80,6 +84,9 @@ elif [ "$node_type" == "networknode" ]
 then
 	ip_address=$MGMT_NETIP_NETWORK
 	ip_address2=$INST_TUNIP_NETWORK
+elif [ "$node_type" == "blocknode" ]
+then
+	ip_address=$MGMT_NETIP_BLOCK
 else
 	ip_address=$MGMT_NETIP_CONTROLLER
 fi
@@ -89,6 +96,7 @@ sed -i "1 i\auto lo \\
 iface lo inet loopback \\
 " $IFACES_CONF
 
+# all nodes need management link
 # management interface
 sed -i "1 i\auto $NIC_DEV_NAME_01 \\
 iface $NIC_DEV_NAME_01 inet static \\
@@ -97,51 +105,58 @@ netmask $MGMT_NETMASK \\
 gateway $MGMT_GATEWAY \\
 " $IFACES_CONF
 
+#For dashborad on cntrnode
+#For tunnel link for comptnode/networknode
 if [ "$node_type" == "cntrnode" ]
 then
-sed -i "1 i\auto $NIC_DEV_NAME_02 \\
-iface $NIC_DEV_NAME_02 inet dhcp \\
-" $IFACES_CONF
+
+	sed -i "1 i\auto $NIC_DEV_NAME_02 \\
+	iface $NIC_DEV_NAME_02 inet dhcp \\
+	" $IFACES_CONF
+
+elif [ "$node_type" == "comptnode" ] || [ "$node_type" == "networknode" ]
+then
+
+	# tunnel interface
+	sed -i "1 i\auto $NIC_DEV_NAME_02 \\
+	iface $NIC_DEV_NAME_02 inet static \\
+	address $ip_address2 \\
+	netmask $MGMT_NETMASK \\
+	" $IFACES_CONF
+
 fi
 
-if [ "$node_type" == "comptnode" ] || [ "$node_type" == "networknode" ]
-then
-# tunnel interface
-sed -i "1 i\auto $NIC_DEV_NAME_02 \\
-iface $NIC_DEV_NAME_02 inet static \\
-address $ip_address2 \\
-netmask $MGMT_NETMASK \\
-" $IFACES_CONF
-fi
 ifdown em1
-ifdown em2
 ifup em1
+ifdown em2
 ifup em2
 
+#For External Link on networknode
 if [ "$node_type" == "networknode" ]
 then
-# external interface
-sed -i "1 i\auto $NIC_DEV_NAME_03 \\
-iface $NIC_DEV_NAME_03 inet manual \\
-up ip link set $NIC_DEV_NAME_03 promisc on \\
-" $IFACES_CONF
 
-# external bridge
-sed -i "1 i\auto br-ex \\
-iface br-ex inet dhcp \\
-" $IFACES_CONF
-ifdown em3
-ifup em3
+	sed -i "1 i\auto $NIC_DEV_NAME_03 \\
+	iface $NIC_DEV_NAME_03 inet manual \\
+	up ip link set $NIC_DEV_NAME_03 promisc on \\
+	" $IFACES_CONF
+
+	# external bridge
+	sed -i "1 i\auto br-ex \\
+	iface br-ex inet dhcp \\
+	" $IFACES_CONF
+
+	ifdown em3
+	ifup em3
 fi
 
 #####################################################################################
 # Edit the /etc/hosts 
 
-sed -i "/cntrnode/d" $HOSTS_CONF
-sed -i "/networknode/d" $HOSTS_CONF
-sed -i "/comptnode/d" $HOSTS_CONF
-sed -i "/block1/d" $HOSTS_CONF
-sed -i "/object1/d" $HOSTS_CONF
+sed -i "/^cntrnode/d" $HOSTS_CONF
+sed -i "/^networknode/d" $HOSTS_CONF
+sed -i "/^comptnode/d" $HOSTS_CONF
+sed -i "/^block/d" $HOSTS_CONF
+sed -i "/^object/d" $HOSTS_CONF
 
 # controller 
 sed -i "1 i $MGMT_NETIP_CONTROLLER      cntrnode.iec.inventec cntrnode"  $HOSTS_CONF
@@ -149,13 +164,17 @@ sed -i "1 i $MGMT_NETIP_CONTROLLER      cntrnode.iec.inventec cntrnode"  $HOSTS_
 # network 
 sed -i "1 i $MGMT_NETIP_NETWORK      networknode.iec.inventec networknode"  $HOSTS_CONF
 
-# compute1 
+# compute
 sed -i "1 i $MGMT_NETIP_COMPUTE1      comptnode.iec.inventec comptnode"  $HOSTS_CONF
 
-# block1 
-#sed -i "1 i $MGMT_NETIP_BLOCK1      block1"  $HOSTS_CONF
+# May has more than one block node, so we need know how many 
+# block node used, their hostname, and ip address
 
-# object1 
-#sed -i "1 i $MGMT_NETIP_OBJECT1      object1"  $HOSTS_CONFex
+# block
+for num in $(seq 1 $BLOCKNODE_NUM) ;
+do
+	eval sed \-i  \"1 i \$MGMT_NETIP_BLOCK$num      blocknode${num}.iec.inventec blocknode${num}\" \.\/\$HOSTS_CONF;
+	
+done
 
 exit 0

@@ -4,7 +4,7 @@ CNTR_NODE=$1
 GLANCE_PASS=$2
 GLANCE_EMAIL=$3
 
-source /tmp/neutron/env/admin-openrc.sh
+source /tmp/base/env/admin-openrc.sh
 
 echo $CNTR_NODE > /tmp/glance/glance_pre.txt
 echo $GLANCE_PASS >> /tmp/glance/glance_pre.txt

@@ -1,4 +1,4 @@
-class neutron::service {
+class neutron::service inherits neutron{
 
 
 	if $nodetype == 'cntrnode' {

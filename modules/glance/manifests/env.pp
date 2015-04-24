@@ -1,4 +1,4 @@
-class glance::env {
+class glance::env inherits glance {
 	
 	include glance::params
 

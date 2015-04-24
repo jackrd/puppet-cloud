@@ -1,4 +1,4 @@
-define nova::dbsetting( $username, $passwd,$db_name, $db_passwd) {
+class nova::dbsetting inherits nova{
 
 
 	exec { "exec_nova_remove_default_db":
@@ -11,8 +11,10 @@ define nova::dbsetting( $username, $passwd,$db_name, $db_passwd) {
 	if $nodetype == 'cntrnode' {
 
 	exec { "create-nova-db":
-   		   unless  => "/usr/bin/mysql -u${user} -p${password} ${name}",
-    		  command => "/usr/bin/mysql -u${username} -p${passwd} -e \"create database ${db_name}; grant all privileges on ${db_name}.* to ${db_name}@'localhost' identified by '${db_passwd}'; grant all privileges on ${db_name}.* to ${db_name}@'%' identified by '${db_passwd}';\"",
+   		   #unless  => "/usr/bin/mysql -u${user} -p${password} ${name}",
+    		  command => "/usr/bin/mysql -u${db_username} -p${db_passwd} -e \"create database ${nova_db_name}; \
+			grant all privileges on ${nova_db_name}.* to ${nova_db_name}@'localhost' identified by '${nova_db_passwd}'; \
+			grant all privileges on ${nova_db_name}.* to ${nova_db_name}@'%' identified by '${nova_db_passwd}';\"",
 		   require => Service['mysql'],
 		  refreshonly => true,
 		  subscribe => Package['nova-api'],

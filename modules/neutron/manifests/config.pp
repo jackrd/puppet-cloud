@@ -1,4 +1,4 @@
-class neutron::config {
+class neutron::config inherits neutron{
 
 	if $nodetype == 'cntrnode' {
 
@@ -29,7 +29,8 @@ class neutron::config {
 			 refreshonly => true,
 			 subscribe => [File["/tmp/neutron/neutron_cntlr.sh"],File["/tmp/neutron/env/neutronrc.sh"]],
 			 require => [File["/tmp/neutron/neutron_cntlr.sh"],File["/tmp/neutron/env/neutronrc.sh"]],
-			 notify => [ Class["nova::service"],Class["neutron::service"]],
+			 #notify => [ Class["nova::service"],Class["neutron::service"]],
+			 notify => Class["neutron::service"],
 		}	
 
 		file { '/tmp/neutron/neutron_cntlr_post.sh':
@@ -60,7 +61,7 @@ class neutron::config {
 			 refreshonly => true,
 			 subscribe => Class['neutron::install'],
 			 #require => [Service['openvswitch-switch'],File['/tmp/neutron/neutron_ovs.sh']],
-			  require => File['/tmp/neutron/neutron_ovs.sh'],
+			 require => File['/tmp/neutron/neutron_ovs.sh'],
 			 notify => Exec['exec_neutron_compt'],
 		}
 
@@ -71,12 +72,13 @@ class neutron::config {
 		}
 
 		exec { "exec_neutron_compt":
+			   onlyif => 'service nova-compute restart',
 			 command => "bash -c '/tmp/neutron/neutron_compt.sh'",
 			 path => ["/bin/","/usr/bin/"],
 			  refreshonly => true,
 			 subscribe => [File["/tmp/neutron/neutron_compt.sh"],File["/tmp/neutron/env/neutronrc.sh"]],
 			 require => [File["/tmp/neutron/neutron_compt.sh"],File["/tmp/neutron/env/neutronrc.sh"]],
-			 notify => Service['nova-compute'],
+			 #notify => Service['nova-compute'],
 		}	
 
 	} elsif $nodetype == 'networknode' {
@@ -107,7 +109,7 @@ class neutron::config {
 			 #onlyif => 'service nova-api restart',
 			 command => "bash -c '/tmp/neutron/neutron_network.sh'",
 			 path => ["/bin/","/usr/bin/"],
-			  refreshonly => true,
+			 refreshonly => true,
 			 subscribe => [File["/tmp/neutron/neutron_network.sh"],File["/tmp/neutron/env/neutronrc.sh"]],
 			 require => [File["/tmp/neutron/neutron_network.sh"],File["/tmp/neutron/env/neutronrc.sh"]],
 			 notify => Class["neutron::service"],

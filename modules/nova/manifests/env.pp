@@ -1,4 +1,4 @@
-class nova::env {
+class nova::env inherits nova {
 	
 	include nova::params
 

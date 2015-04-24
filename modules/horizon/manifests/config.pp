@@ -1,4 +1,4 @@
-class horizon::config {
+class horizon::config inherits horizon{
 
 	file { '/tmp/horizon/horizon.sh':
 		source => 'puppet:///modules/horizon/script/horizon.sh',

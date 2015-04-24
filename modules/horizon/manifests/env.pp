@@ -1,4 +1,4 @@
-class horizon::env {
+class horizon::env inherits horizon{
 	
 	include horizon::params
 

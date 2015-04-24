@@ -10,7 +10,7 @@
 source /tmp/env/setuprc.sh
 source /tmp/neutron/env/neutronrc.sh
 source /tmp/nova/env/novarc.sh
-source /tmp/neutron/env/admin-openrc.sh
+source /tmp/base/env/admin-openrc.sh
 
 # Configuration File
 

@@ -1,4 +1,4 @@
-class keystone::env {
+class keystone::env inherits keystone {
 	
 	include keystone::params
 

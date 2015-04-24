@@ -1,4 +1,4 @@
-class keystone::config {
+class keystone::config inherits keystone{
 
 
 	file { '/tmp/keystone/keystone.sh':
@@ -25,9 +25,9 @@ class keystone::config {
 		environment => ["OS_SERVICE_TOKEN=${os_service_token}", "OS_SERVICE_ENDPOINT=${os_service_endpoint}"],
 		command => "bash -c '/tmp/keystone/keystone_post.sh ${nodetype} ${aDMIN_PASS} ${aDMIN_EMAIL}'",
 		path => ["/bin/","/usr/bin/"],
-		require => [Package['keystone'],service["keystone"]],
+		require => [Package['keystone'],Service["keystone"]],
 		refreshonly => true,
-		subscribe => service["keystone"],
+		subscribe => Service["keystone"],
 	}
 
 }

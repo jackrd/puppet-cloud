@@ -1,4 +1,4 @@
-class nova::install {
+class nova::install inherits nova{
 	
 	if $nodetype == 'cntrnode' {
 
@@ -7,7 +7,7 @@ class nova::install {
 		}
 	} elsif $nodetype == 'comptnode'{
 
-		package { ["nova-compute", "python-guestfs"]:
+		package { ["nova-compute-kvm"]:
 			ensure => installed,
 		}
 	}

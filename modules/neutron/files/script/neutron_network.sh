@@ -135,9 +135,9 @@ auth_url = http:\/\/$MGMT_NETIP_CONTROLLER:5000\/v2.0 \\
 auth_region = regionOne \\
 admin_tenant_name = service \\
 admin_user = neutron \\
-admin_password = $NEUTRON_METADATA_SECRET \\
+admin_password = $NEUTRON_PASS \\
 nova_metadata_ip = $MGMT_NETIP_CONTROLLER \\
-metadata_proxy_shared_secret = $NEUTRON_METADATA_SECRET 
+metadata_proxy_shared_secret = $METADATA_SECRET 
 " $METADATA_AGENT_INI
 
 #####################################################################################

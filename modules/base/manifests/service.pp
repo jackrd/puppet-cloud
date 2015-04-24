@@ -1,4 +1,5 @@
-class base::service {
+class base::service inherits base  {
+
 	service { ["ntp"]:
 		ensure => running,
 		hasstatus => true,

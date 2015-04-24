@@ -1,4 +1,4 @@
-class neutron::install {
+class neutron::install inherits neutron {
 
 
 	if $nodetype == 'cntrnode' {
@@ -13,7 +13,7 @@ class neutron::install {
 
 	} elsif $nodetype == 'comptnode' {
 
-		package { ["neutron-common", "neutron-plugin-ml2", "neutron-plugin-openvswitch-agent","openvswitch-switch"]:
+		package { ["neutron-common", "neutron-plugin-ml2", "neutron-plugin-openvswitch-agent"]:
 			ensure => installed,
 		}
 

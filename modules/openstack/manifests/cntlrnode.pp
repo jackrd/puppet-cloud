@@ -1,5 +1,8 @@
-class openstack::cntlrnode {
+class openstack::cntlrnode inherits openstack {
 
+	notify { "The value of nodetype : ${nodetype}": }
+	notify { "The value of mGMT_NETIP_CONTROLLER : ${mGMT_NETIP_CONTROLLER}": }
+	
 	stage {'cntlrnodejob1':
 		before => Stage['cntlrnodejob2'],
 	}
@@ -55,5 +58,18 @@ class openstack::cntlrnode {
 	include nova
 	include neutron
 	include horizon
+
+	if $storage_type == 'block' {
+	
+		include cinder
+	}
+	elsif $storage_type == 'object'{
+
+		include swift
+	}
+	elsif $storage_type == 'both'{
+		include cinder
+		include swift
+	}
 
 }

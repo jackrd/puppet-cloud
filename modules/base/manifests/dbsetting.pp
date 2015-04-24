@@ -1,4 +1,4 @@
-class base::dbsetting {
+class base::dbsetting inherits base{
 
 	if $nodetype == 'cntrnode' {
 

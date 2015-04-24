@@ -4,7 +4,7 @@ CNTRNODE=$1
 NOVA_PASS=$2
 NOVA_EMAIL=$3
 
-source /tmp/neutron/env/admin-openrc.sh
+source /tmp/base/env/admin-openrc.sh
 
 echo $CNTRNODE > /tmp/nova/nova_cntlr_pre.txt
 echo $NOVA_PASS >> /tmp/nova/nova_cntlr_pre.txt

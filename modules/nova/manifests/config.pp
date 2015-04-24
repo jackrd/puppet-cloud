@@ -1,4 +1,4 @@
-class nova::config {
+class nova::config inherits nova{
 
 	if $nodetype == 'cntrnode' {
 

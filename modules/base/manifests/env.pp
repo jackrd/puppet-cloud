@@ -1,12 +1,14 @@
-class base::env {
+class base::env inherits base {
 	
-	include base::params
-
 	file { '/tmp/env/':
 		ensure => directory,
 	}
 	
 	file { '/tmp/base/':
+		ensure => directory,
+	}
+
+	file { '/tmp/base/env/':
 		ensure => directory,
 	}
 
@@ -23,6 +25,16 @@ class base::env {
 	#	notify => Class["base::config"]
 	#}
 
+	file { '/tmp/base/env/admin-openrc.sh':
+		ensure => present,
+		content => template("base/env/admin-openrc.sh.erb"),
+		mode => 777,
+	}
+
+	file { '/tmp/base/env/admin-closerc.sh':
+		source => 'puppet:///modules/base/script/admin-closerc.sh',
+		mode => 777,
+	}
 	
 
 }

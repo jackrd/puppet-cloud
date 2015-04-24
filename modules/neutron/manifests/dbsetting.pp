@@ -1,10 +1,12 @@
-define neutron::dbsetting( $username, $passwd,$db_name, $db_passwd) {
+class neutron::dbsetting inherits neutron{
 
 	if $nodetype == 'cntrnode' {
 
 		exec { "create-neutron-db":
-			 unless  => "/usr/bin/mysql -u${user} -p${password} ${name}",
-			 command => "/usr/bin/mysql -u${username} -p${passwd} -e \"create database ${db_name}; grant all privileges on ${db_name}.* to ${db_name}@'localhost' identified by '${db_passwd}'; grant all privileges on ${db_name}.* to ${db_name}@'%' identified by '${db_passwd}';\"",
+			 #unless  => "/usr/bin/mysql -u${user} -p${password} ${name}",
+			 command => "/usr/bin/mysql -u${db_username} -p${db_passwd} -e \"create database ${neutron_db_name}; \
+				grant all privileges on ${neutron_db_name}.* to ${neutron_db_name}@'localhost' identified by '${neutron_db_passwd}'; \
+				grant all privileges on ${neutron_db_name}.* to ${neutron_db_name}@'%' identified by '${neutron_db_passwd}';\"",
 			 require => Service['mysql'],
 			 refreshonly => true,
 			 subscribe => Class['neutron::install'],

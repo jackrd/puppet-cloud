@@ -1,4 +1,4 @@
-class base::install {
+class base::install inherits base {
 	
 	package { ["ntp", "expect", "python-mysqldb"]:
 		ensure => installed,

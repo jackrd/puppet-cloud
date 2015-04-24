@@ -1,4 +1,4 @@
-class nova::service {
+class nova::service inherits nova{
 
 	if $nodetype == 'cntrnode' {
 

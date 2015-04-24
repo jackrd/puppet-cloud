@@ -1,19 +1,13 @@
-class base::config {
+class base::config inherits base{
 
 
-	file { "/tmp/base/base.sh":
-		source => 'puppet:///modules/base/script/base.sh',
-		mode => 777,
-		require => File['/tmp/base/'],
-	}
-
-	file { "/tmp/base/rabbitmqctl.sh":
-		source => 'puppet:///modules/base/script/rabbitmqctl.sh',
-		mode => 777,
-		require => File['/tmp/base/'],
-	}
-	
 	if $nodetype == 'cntrnode' {
+
+		file { "/tmp/base/rabbitmqctl.sh":
+			source => 'puppet:///modules/base/script/rabbitmqctl.sh',
+			mode => 777,
+			require => File['/tmp/base/'],
+		}
 
 		exec {"exec_rabbitmq":
 			cwd => '/tmp/base/',
@@ -28,8 +22,14 @@ class base::config {
 		}
 	}
 
+	file { "/tmp/base/base.sh":
+		source => 'puppet:///modules/base/script/base.sh',
+		mode => 777,
+		require => File['/tmp/base/'],
+	}
+
 	exec { "exec_base":
-		command => "bash -c '/tmp/base/base.sh ${nodetype}'",
+		command => "bash -c '/tmp/base/base.sh ${nodetype} ${numofblocknode}'",
 		path => ["/bin/","/usr/bin/"],
 		refreshonly => true,
 		subscribe => [ File['/tmp/base/base.sh'],File['/tmp/env/setuprc.sh'] ],

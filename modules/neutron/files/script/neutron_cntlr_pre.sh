@@ -4,7 +4,7 @@ CNTRNODE=$1
 NEUTRON_PASS=$2
 NEUTRON_EMAIL=$3
 
-source /tmp/neutron/env/admin-openrc.sh
+source /tmp/base/env/admin-openrc.sh
 
 echo $CNTRNODE > /tmp/neutron/neutron_cntlr_pre.txt
 echo $NEUTRON_PASS >> /tmp/neutron/neutron_cntlr_pre.txt

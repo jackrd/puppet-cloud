@@ -13,7 +13,7 @@ class test {
 	# copy db.sh to /tmp/test/script/ 
 	#run db.sh with parameter $username, $passwd ,$db_name and $db_passwd
 	#run keystone-manage --nodebug db_sync
-	include test::dbsetting
+	#include test::dbsetting
 
 	#include test2::env
 	include test::env

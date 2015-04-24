@@ -1,4 +1,4 @@
-class glance::config {
+class glance::config inherits glance{
 
 	file { '/tmp/glance/glance_pre.sh':
 		source => 'puppet:///modules/glance/script/glance_pre.sh',

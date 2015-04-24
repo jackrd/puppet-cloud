@@ -1,4 +1,4 @@
-define keystone::dbsetting( $username, $passwd,$db_name, $db_passwd) {
+class keystone::dbsetting inherits keystone{
 
 	exec { "exec_keystone_remove_default_db":
 		command => "rm -rf /var/lib/keystone/keystone.sqlite",
@@ -9,8 +9,10 @@ define keystone::dbsetting( $username, $passwd,$db_name, $db_passwd) {
 
 
 	exec { "create-keystone-db":
-   		 unless  => "/usr/bin/mysql -u${user} -p${password} ${name}",
-    		 command => "/usr/bin/mysql -u${username} -p${passwd} -e \"create database ${db_name}; grant all privileges on ${db_name}.* to ${db_name}@'localhost' identified by '${db_passwd}'; grant all privileges on ${db_name}.* to ${db_name}@'%' identified by '${db_passwd}';\"",
+   		 #unless  => "/usr/bin/mysql -u${user} -p${password} ${name}",
+    		 command => "/usr/bin/mysql -u${db_username} -p${db_passwd} -e \"create database ${keystone_db_name}; \
+				grant all privileges on ${keystone_db_name}.* to ${keystone_db_name}@'localhost' identified by '${keystone_db_passwd}'; \
+			   	grant all privileges on ${keystone_db_name}.* to ${keystone_db_name}@'%' identified by '${keystone_db_passwd}';\"",
 		 require => Service['mysql'],
 		 refreshonly => true,
 		 subscribe => Class['keystone::install'],
